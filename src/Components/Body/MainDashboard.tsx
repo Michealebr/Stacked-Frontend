@@ -1,49 +1,39 @@
 import { useState } from 'react';
 import "./MainDashboard.css"
-interface Interval {
-  value: string;
-  label: string;
-}
+import Calander from "src/assets/Calander.svg"
+import Stock from "src/assets/Stock.svg"
+import DropdownButton from './DropdownButton';
+
 
 const mainDashboard = () => {
-
-  const [isClicked, setClick] = useState(false)
-  const handleCLick = () => {
-    setClick(!isClicked)
-  }
-
- const [selectedInterval, setSelectedInterval] = useState<Interval>({ value: 'monthly', label: 'This Month' });
-  const intervals: Interval[] = [
+ 
+  const timeIntervals = [
     { value: 'This month', label: 'This Month' },
     { value: '3months', label: '3 Months' },
     { value: '6months', label: '6 Months' },
     { value: 'This yearl', label: 'This Year' },
   ];
-  const handleIntervalClick = (interval: Interval) => {
-    setSelectedInterval(interval)
-  }
+  const products = [
+    { value: 'All Products', label: 'All Products' },
+    { value: 'Footwear', label: 'Footwear' },
+    { value: 'Clothes', label: 'Clothes' },
+    { value: 'Other', label: 'Other' },
+ 
+  ];
 
 
   return (
-    <div>
+    <div className='main-dash'>
       <div className="filter-container">
-      <div className="dropdown">
-        <button className="dropbtn" onClick={handleCLick}>{selectedInterval.label}</button>
-        <div className={`dropdown-content ${isClicked? 'active': 'closed'}`}>
-        {intervals.map((interval) => (
-            <div
-              key={interval.value}
-              onClick={() => handleIntervalClick(interval)}
-              className={selectedInterval.value === interval.value ? 'selected' : ''}
-            >
-              {interval.label}
-            </div>
-          ))}
-        </div>
+<DropdownButton intervals={timeIntervals} svg={Calander}/>
+<DropdownButton intervals={products} svg={Stock}/>
+     
       </div>
-
-      </div>
-      <div className="grid">
+      <div className="grid-container">
+        <div className="card c1"></div>
+        <div className="card c2"></div>
+        <div className="card c3"></div>
+        <div className="card c4"></div>
 
       </div>
     </div>
