@@ -10,3 +10,11 @@
   height: 6em;
   padding: 1.5em;
 }
+.page{
+  padding-left: 140px ;
+  padding-right: 40px ;
+  width: 970px;
+  height: 100vh;
+  overflow-y: hidden;
+  overflow: none;
+}

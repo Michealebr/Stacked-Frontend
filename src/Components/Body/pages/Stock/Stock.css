@@ -1,0 +1,10 @@
+.page-body{
+    background-color: #F9FAFB;
+    border-radius: 10px;
+    height: 520px;
+    box-shadow: 0.2rem .2rem .5rem rgba(0, 0, 0, 0.1);
+}
+.page-header{
+    height: 100px;
+    
+}

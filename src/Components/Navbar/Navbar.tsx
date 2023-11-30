@@ -1,5 +1,14 @@
 import React from 'react'
 import './Navbar.css'
+import {Link} from 'react-router-dom';
+
+
+// interface pageName {
+//   Link: string;
+// }
+// interface navItems {
+//   Link: string;
+// }
 
 const Navbar = ({Navitems}) => {
   return (
@@ -10,9 +19,11 @@ const Navbar = ({Navitems}) => {
       <div className='nav-container'>
       <ul className='navlist'>
         {Navitems.map((item, index) => (
-           <li key={index} className={item.class}>
+          <Link to={item.link} key={index}>
+           <li className={item.class}>
             <img src={item.icon} alt={item.text} className='nav-icon' />
            </li>
+           </Link>
         ))}
       </ul>
       </div>
