@@ -52,18 +52,8 @@
     transition: all 0.4s cubic-bezier(0.93, 0.88, 0.1, 0.8);
     padding: 7px 0px;
     box-shadow: 0.2rem .1rem 1rem rgba(0, 0, 0, 0.1);
-
-
   }
-  /* .dropdown-content::before{
-    content: "";
-    background-color: white;;
-    position: absolute;
-    bottom: 100%;
-    right: 20%;
-    height: 40px;
-    width: 23px;
-  } */
+
 
   
 .active{
