@@ -47,13 +47,6 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ intervals , svg}) => {
             </div>
           ))}
         </div>
-        {/* <svg className='not-in-use'>
-  <filter id="goo">
-    <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
-    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
-    <feBlend in="SourceGraphic" in2="goo" />
-  </filter>
-</svg> */}
       </div>
   )
 }
