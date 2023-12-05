@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import "./Stock.css"
 import FilterIcon from 'src/assets/Filter.svg'
 import AddIcon from 'src/assets/Add.svg'
@@ -8,11 +8,36 @@ import Edit from 'src/assets/Edit.svg'
 import Sold from 'src/assets/Sold.svg'
 import Cross from 'src/assets/X.svg'
 import DropDownBtn from '@/Components/UsefulComponents/DropDownBtn'
+import AddStockModal from './AddStockModal';
+import EditStockModal from './EditStockModal';
+
 
 
 
 
 const Stock = () => {
+
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+
+  const handleAddClick = () => {
+    setAddModalOpen(true);
+  };
+
+  const handleEditClick = (productId: string) => {
+    // Fetch data for the product based on productId
+    // Set the data to a state variable
+    // Open the Edit modal
+    setEditModalOpen(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setAddModalOpen(false);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalOpen(false);
+  };
   const productStockFilter = [
     { value: 'Size', label: 'Size' },
     { value: 'Newest', label: 'Newest' },
@@ -28,8 +53,7 @@ const Stock = () => {
         <input className="searchbar"type='text'></input>
         </div>
         <div className="btn-container">
-        <button className=' btn add-stock'><span><img className='add-icon' src={AddIcon} alt="add icon" /></span>Add Stock</button>
-        {/* <button className='btn filter'><span><img className='filter-icon' src={FilterIcon} alt="add icon" /></span></button> */}
+        <button className=' btn add-stock' onClick={handleAddClick}><span><img className='add-icon' src={AddIcon} alt="add icon" /></span>Add Stock</button>
        <DropDownBtn option={productStockFilter} svg={FilterIcon} content={"Filter"} leftIcon={true} textContent={true} rightIcon={false} dropDownDesign={'stock-filter'}/>
         </div>
       </div>
@@ -52,13 +76,15 @@ const Stock = () => {
 
            </div>
            <div className="icon-container">
-            <button className='icon-btn'><img className='edit-icon' src={Edit} alt='edit'/></button>
+            <button className='icon-btn' onClick={() => handleEditClick(product.id)}><img className='edit-icon' src={Edit} alt='edit'/></button>
             <button className='icon-btn'> <img className='edit-icon' src={Sold} alt='sold'/></button>
             <button className='icon-btn'> <img className='edit-icon' src={Cross} alt='cross'/></button>
            </div>
           </div>
           {/* all this needs to be looped  */}
         </div>
+        <AddStockModal isOpen={isAddModalOpen} onClose={handleCloseAddModal} />
+      <EditStockModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
     </div>
     </>
 

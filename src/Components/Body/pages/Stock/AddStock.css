@@ -1,0 +1,29 @@
+.stock-searchbar{
+    background-color: #F4F4F4;
+    margin-top: 10px;
+    box-shadow: none;
+}
+.custom-product-container{
+    display: flex;
+ justify-content: center;
+ margin-top: 10px;
+}
+.add-custom-product{
+    display: flex;
+
+    align-items: center;
+    width: 80%;
+    border: none;
+    background-color: white;
+    margin: 20px auto;
+cursor: pointer;
+outline: none;
+}
+
+.custom-product-text{
+justify-content: center;
+    text-align: center;
+    width: 100%;
+
+
+}

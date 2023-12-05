@@ -13,7 +13,7 @@
 .searchbar{
     width: 400px;
     height: 40px;
-    background-color:#F9FAFB;
+    background-color: white;
     border: none;
     border-radius: 10px;
     padding-left: 40px;
@@ -51,10 +51,7 @@
    
 
 }
-.filter-icon{
-    height: 20px;
-    /* margin-right: 20px; */
-}
+ 
 .add-stock{
     margin-right: 20px;
     padding: 0px 20px;
@@ -97,6 +94,8 @@
     margin: 0px;
     padding: 0px;
     text-align: left;
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Display ellipsis for overflow text */
 }
 .product-sku{
     text-align: left;
