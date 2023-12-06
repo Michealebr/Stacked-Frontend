@@ -18,12 +18,50 @@
     margin: 20px auto;
 cursor: pointer;
 outline: none;
+
 }
 
 .custom-product-text{
 justify-content: center;
     text-align: center;
     width: 100%;
-
-
+}
+.add-stock-container{
+    padding: 0px 15px;
+}
+.each-product-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+.item-add-icon{
+    height: 20px;
+}
+.add-product-info-container{
+display: flex;
+flex-direction: row;
+min-width: 90%;
+align-items: center;
+}
+.add-product-text{
+    width: 100%;
+}
+.add-to-edit-btn{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+.each-product-container:hover{
+    background-color: #F4F4F4;
+}
+.add-to-stock-img{
+    margin-right: 10px;
+    padding-left: 10px;
+    width: 50px;
+    border-radius: 5px;
+}
+.item-add-icon{
+    padding-right: 5px;
 }
