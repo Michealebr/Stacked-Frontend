@@ -5,15 +5,19 @@ import Add from 'src/assets/Add.svg'
 import Shoe from 'src/assets/Shoe.svg'
 import Shoe2 from 'src/assets/Shoe2.svg'
 
+
 interface AddStockProps {
   onClose: () => void;
+  onProduct: any;
+
 }
 
-const AddStock: React.FC<AddStockProps> = ({ onClose }) => {
+
+const AddStock: React.FC<AddStockProps> = ({ onClose , onProduct}) => {
   return (
     <div className="modal-container">
       <button className="close-btn" onClick={onClose}><img className="modal-cross" src={Cross}/></button>
-      <div className="add-stock-header">
+      <div className="add-stock-header ">
         <div className="search-box">
           <img className="search-icon" src={SearchIcon} alt="search icon" />
           <input className="searchbar stock-searchbar" type="text"></input>
@@ -26,7 +30,7 @@ const AddStock: React.FC<AddStockProps> = ({ onClose }) => {
 
       <div className="add-stock-container">
         {/* each product line */}
-        <div className="each-product-container">
+        <div className="each-product-container" onClick={onProduct} >
           
           <div className="product-info-container add-product-info-container">
           <img className="product-img add-to-stock-img" src={Shoe} alt=""/>
@@ -55,6 +59,7 @@ const AddStock: React.FC<AddStockProps> = ({ onClose }) => {
         
       </div>
     </div>
+    
   );
 };
 

@@ -7,7 +7,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(5px); 
     z-index: 3;
 }
 
@@ -18,7 +17,12 @@
     background: white;
     padding: 20px;
     border-radius: 20px;
-    /* box-shadow: 0.2rem .2rem .5rem rgba(0, 0, 0, 0.1); */
+  }
+  .mc1{
+    box-shadow: 0.2rem .1rem 1rem rgba(0, 0, 0, 0.1);
+
+  }
+  .shadow{
     box-shadow: 0.2rem .1rem 1rem rgba(0, 0, 0, 0.1);
   }
 .close-btn{
@@ -33,4 +37,11 @@
 }
 .modal-cross{
     height: 22px;
+}
+.modal1{
+    backdrop-filter: blur(5px); 
+
+}
+.blur{
+    backdrop-filter: blur(5px); 
 }

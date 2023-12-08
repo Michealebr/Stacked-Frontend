@@ -24,7 +24,13 @@ const Stock = () => {
     setAddModalOpen(true);
   };
 
-  const handleEditClick = (productId: string) => {
+  // const handleEditClick = (productId: string) => {
+  //   // Fetch data for the product based on productId
+  //   // Set the data to a state variable
+  //   // Open the Edit modal
+  //   setEditModalOpen(true);
+  // };
+  const handleEditClick = () => {
     // Fetch data for the product based on productId
     // Set the data to a state variable
     // Open the Edit modal
@@ -76,14 +82,14 @@ const Stock = () => {
 
            </div>
            <div className="icon-container">
-            <button className='icon-btn' onClick={() => handleEditClick(product.id)}><img className='edit-icon' src={Edit} alt='edit'/></button>
+            <button className='icon-btn' onClick={handleEditClick}><img className='edit-icon' src={Edit} alt='edit'/></button>
             <button className='icon-btn'> <img className='edit-icon' src={Sold} alt='sold'/></button>
             <button className='icon-btn'> <img className='edit-icon' src={Cross} alt='cross'/></button>
            </div>
           </div>
           {/* all this needs to be looped  */}
         </div>
-        <AddStockModal isOpen={isAddModalOpen} onClose={handleCloseAddModal} />
+        <AddStockModal isOpen={isAddModalOpen} onClose={handleCloseAddModal} onProductSelect={handleEditClick}/>
       <EditStockModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
     </div>
     </>
