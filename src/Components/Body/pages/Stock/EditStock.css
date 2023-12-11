@@ -1,7 +1,7 @@
 .edit-stock-header {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+
 }
 .edit-stock-img {
   margin-right: 20px;
@@ -54,9 +54,9 @@ padding-bottom: 10px;
     gap: 5px;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 15px;
+    margin-top: 10px;
     border-bottom: solid 1px #F4F4F4;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
 
 }
 .product-size-btn{
@@ -75,10 +75,10 @@ padding-bottom: 10px;
 
 
 .size-list-container{
-    padding-top: 15px;
-    max-height: 220px;
+    padding-top: 10px;
+    max-height: 210px;
     border-bottom: solid 1px #F4F4F4;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -110,6 +110,7 @@ justify-content: space-between;
     width: 40px;
     height: 17px;
     border: solid 2px #F4F4F4;
+
     border-radius: 5px;
     font-size: 12px;
     justify-content: end;
@@ -117,6 +118,7 @@ justify-content: space-between;
     outline: none;
 
 }
+
 .cancel-selected-size{
     width: 12px;
     
@@ -129,4 +131,92 @@ border: none;
 align-items: center;
 cursor: pointer;
 margin-left: 10px;
+}
+
+
+/* price input section */
+
+.price-info-container{
+    display: flex;
+}
+
+
+.input-info-ps::-webkit-inner-spin-button,
+.input-info-ps::-webkit-outer-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}
+.lol{
+    display: flex;
+}
+.price-info-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.purchase-price-input{
+    width: 100px !important; 
+    border: solid 1px #F4F4F4;
+    border-radius: 0px 5px 5px 0px ;
+    padding: 0px;
+}
+.input-info-ps{
+    outline: none;
+    border: solid 1px #F4F4F4;
+    height: 35px;
+    padding: 0px;
+padding-left: 10px;
+width: 150px;
+
+
+}
+.input-info-ps::placeholder{
+    /* padding-left: 10px; */
+    color:#CFCFCF;
+}
+.curreny-btn-ctn-width{
+    width: 57px;
+
+
+}
+.currency-btn{
+    width: 57px;
+    justify-content: space-between;
+    padding: 0px 10px;
+    height: 37px;
+    font-size: 13px;
+    box-shadow: none;
+    background-color: #F4F4F4;
+    border-radius: 5px 0px 0px 5px ;
+}
+.currency-btn-arrow-size{
+    height: 17px;
+}
+.drop-currency-btn-width{
+    min-width: 57px;
+    font-size: 13px;
+}
+.buy-date-input{
+    font-family: "laced";
+    font-size: 14px;
+    padding: 0px 10px ;
+    width: 140px;
+}
+.price-input-label{
+    display: flex;
+    font-size: 12px;
+text-align: left;
+margin-bottom: 5px;
+}
+
+.submit-form-btn{
+    outline: none;
+    border: none;
+    background-color: #F4F4F4;
+    height: 35px;
+    width: 100px;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+
 }

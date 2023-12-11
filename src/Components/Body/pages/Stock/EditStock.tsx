@@ -1,14 +1,16 @@
 import "./EditStock.css";
 import Cross from "src/assets/X.svg";
 import Shoe from "src/assets/Shoe.svg";
-import Trash from "src/assets/Trash.svg"
 import { useState, useEffect } from "react";
+import DropdownButton from "../../DropdownButton";
 
 interface SelectSizeBtn {
   value: string;
   label: string;
   quantity: number;
 }
+
+
 interface EditStockProps {
   onClose: () => void;
 }
@@ -16,6 +18,12 @@ const shoeSizeFilter = [
   { value: "UK", label: "UK" },
   { value: "EU", label: "EU" },
   { value: "US", label: "US" },
+];
+
+const currency = [
+  { value: "£", label: "£" },
+  { value: "$", label: "$" },
+  { value: "€", label: "€" },
 ];
 
 const productSizes = [
@@ -52,9 +60,7 @@ const EditStock: React.FC<EditStockProps> = ({ onClose }) => {
   const handleCLick = () => {
     setClick(!isClicked);
   };
-  const [selectedSize, setSelectedSize] = useState<SelectSizeBtn>(
-    shoeSizeFilter[0]
-  );
+  const [selectedSize, setSelectedSize] = useState<SelectSizeBtn>(shoeSizeFilter[0]);
 
   const handleSizeClicked = (size: SelectSizeBtn) => {
     setSelectedSize(size);
@@ -64,30 +70,16 @@ const EditStock: React.FC<EditStockProps> = ({ onClose }) => {
   // for the form
 
   const [selectedSizes, setSelectedSizes] = useState<Array<SelectSizeBtn>>([]);
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<number>();
   const [acquisitionDate, setAcquisitionDate] = useState<string>("");
+  // const [defaultDate, setDefaultDate] = useState<string>("")
+  const [shippingFee, setShippingFee] = useState<number>();
 
-  // const handleSelectedSize = (size: SelectSizeBtn) => {
-  //   setSelectedSizes((prevSizes) => {
-  //     const updatedSizes = [...prevSizes];
-  //     const index = updatedSizes.findIndex(
-  //       (prevSize) => prevSize.value === size.value
-  //     );
+  const currentDate = new Date().toISOString().split("T")[0];
 
-  //     if (index !== -1) {
-  //       // If the size is already selected, update the quantity
-  //       updatedSizes[index] = {
-  //         ...updatedSizes[index],
-  //         quantity: updatedSizes[index].quantity + 1,
-  //       };
-  //     } else {
-  //       // If the size is not selected, add it with quantity 1
-  //       updatedSizes.push({ ...size, quantity: 1 });
-  //     }
-  //     console.log("Updated Sizes:", updatedSizes); // Log the updated sizes
-  //     return updatedSizes;
-  //   });
-  // };
+  // setAcquisitionDate(currentDate)
+  // setDefaultDate(currentDate)
+
   const handleSizeInteraction = (size: SelectSizeBtn, newQuantity?: number) => {
     setSelectedSizes((prevSizes) => {
       const updatedSizes = [...prevSizes];
@@ -120,9 +112,10 @@ const EditStock: React.FC<EditStockProps> = ({ onClose }) => {
 
     // Gather form data
     const formData = {
-      sizes: selectedSizes.map((size) => size.label),
+      sizes: selectedSizes.map((size) => size),
       price,
       acquisitionDate,
+      shippingFee,
     };
 
     // Log or perform other actions with the form data
@@ -157,9 +150,8 @@ const EditStock: React.FC<EditStockProps> = ({ onClose }) => {
   };
 
   return (
-    
-      <div className="modal-container">
-      <form action={handleFormSubmit}>
+    <div className="modal-container">
+      <form onSubmit={handleFormSubmit}>
         <button className="close-btn" onClick={onClose}>
           <img className="modal-cross" src={Cross} />
         </button>
@@ -204,36 +196,92 @@ const EditStock: React.FC<EditStockProps> = ({ onClose }) => {
             </button>
           ))}
         </div>
-        
-          <div className="size-list-container">
-            {selectedSizes.map((size) => (
-              <div className="slected-size-container">
-              <div 
-              className="size-list"
-              key={size.value}>
+
+        <div className="size-list-container">
+          {selectedSizes.map((size) => (
+            <div className="slected-size-container">
+              <div className="size-list" key={size.value}>
                 {size.label} x{" "}
-                </div>
-                <div>
+              </div>
+              <div>
                 <input
                   className="quantity-input"
                   type="number"
                   value={size.quantity}
                   onChange={(e) => handleQuantityChange(size, e.target.value)}
                 />
-                </div>
-                <button 
-                 className="fix-cross"
-                onClick={(e) => {
-                    e.preventDefault()
-                  handleDeleteSize(size)}}
-                  >
-                <img className="cancel-selected-size" src={Cross} alt="" />
-                </button>
               </div>
-            ))}
+              <button
+                className="fix-cross"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDeleteSize(size);
+                }}
+              >
+                <img className="cancel-selected-size" src={Cross} alt="" />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="price-info-container">
+          {/* product price input */}
+          <div className="input-price-info">
+            <label className="price-input-label" htmlFor="productPrice">
+              Purchase Price*
+            </label>
+            <div className="lol">
+              <DropdownButton
+                intervals={currency}
+                buttonWidth="currency-btn"
+                arrowSize="currency-btn-arrow-size"
+                btnContainerWidth="curreny-btn-ctn-width"
+                dropdownWidth="drop-currency-btn-width"
+                svg={null}
+              />
+              <input
+                className="purchase-price-input input-info-ps"
+                type="number"
+                required
+                placeholder="0.00"
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+              />
+            </div>
           </div>
 
-        <button type="submit"></button>
+          {/* purchase date input */}
+          <div className="input-price-info">
+            <label className="price-input-label" htmlFor="purchaseDate">
+              Date of Purchase*
+            </label>
+            <input
+              className="input-info-ps buy-date-input"
+              type="date"
+              required
+              max={currentDate}
+              defaultValue={currentDate}
+              onChange={(e) => setAcquisitionDate(e.target.value)}
+            />
+          </div>
+
+          {/* shipping price input */}
+          <div className="input-price-info">
+            <label className="price-input-label" htmlFor="shippingPrice">
+              Shipping fee
+            </label>
+            <input
+              className="input-info-ps"
+              type="number"
+              value={shippingFee}
+              onChange={(e) => setShippingFee(Number(e.target.value))}
+            />
+          </div>
+        </div>
+
+        <button className="submit-form-btn" type="submit">
+          Add Stock
+        </button>
       </form>
     </div>
   );
