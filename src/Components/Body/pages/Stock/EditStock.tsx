@@ -13,6 +13,7 @@ interface SelectSizeBtn {
 
 interface EditStockProps {
   onClose: () => void;
+  onFormSubmit: (formData: any) => void;
 }
 const shoeSizeFilter = [
   { value: "UK", label: "UK" },
@@ -54,7 +55,7 @@ const productSizes = [
   { value: "17", label: "17", quantity: 0 },
 ];
 
-const EditStock: React.FC<EditStockProps> = ({ onClose }) => {
+const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit }) => {
   // Your logic for handling the editing of an existing stock item
   const [isClicked, setClick] = useState(false);
   const handleCLick = () => {
@@ -112,11 +113,16 @@ const EditStock: React.FC<EditStockProps> = ({ onClose }) => {
 
     // Gather form data
     const formData = {
+      img,
+      productName,
+      sku,
       sizes: selectedSizes.map((size) => size),
       price,
       acquisitionDate,
       shippingFee,
     };
+
+    onFormSubmit(formData)
 
     // Log or perform other actions with the form data
     console.log("Form data:", formData);

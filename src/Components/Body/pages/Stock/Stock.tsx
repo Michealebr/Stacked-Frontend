@@ -12,13 +12,19 @@ import AddStockModal from './AddStockModal';
 import EditStockModal from './EditStockModal';
 
 
-
+interface StockEntry {
+  productName: string;
+  size: string;
+  quantity: number;
+  price: number;
+}
 
 
 const Stock = () => {
 
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [stockEntries, setStockEntries] = useState<StockEntry[]>([]);
 
   const handleAddClick = () => {
     setAddModalOpen(true);
@@ -44,6 +50,13 @@ const Stock = () => {
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
   };
+
+
+  const handleFormSubmit = (formData: StockEntry) => {
+    setStockEntries((prevStockEntries) => [...prevStockEntries, formData]);
+    console.log("Form submitted with data:", formData);
+  };
+
   const productStockFilter = [
     { value: 'Size', label: 'Size' },
     { value: 'Newest', label: 'Newest' },
@@ -63,9 +76,10 @@ const Stock = () => {
        <DropDownBtn option={productStockFilter} svg={FilterIcon} content={"Filter"} leftIcon={true} textContent={true} rightIcon={false} dropDownDesign={'stock-filter'}/>
         </div>
       </div>
+    
         <div className='page-body'>
           {/* each product  */}
-          <div className="product-line">
+          {/* <div className="product-line">
           <div className="info-container">
             <img className="product-img" src={Shoe}/>
             <div className="product-info-container">
@@ -86,11 +100,35 @@ const Stock = () => {
             <button className='icon-btn'> <img className='edit-icon' src={Sold} alt='sold'/></button>
             <button className='icon-btn'> <img className='edit-icon' src={Cross} alt='cross'/></button>
            </div>
-          </div>
+          </div> */}
+          <table>
+        <thead>
+          <tr>
+            <th>img</th>
+            <th>name & sku</th>
+            <th>size</th>
+            <th>Purchase Price</th>
+            <th>expected sale price</th>
+            <th>expected profit</th>
+            <th>Purchase date</th>
+            <th>Product btn</th>
+          </tr>
+        </thead>
+        <tbody>
+           {stockEntries.map((entry, index) => (
+          <tr key={index}>
+            <td>{entry.productName}</td>
+            <td>{entry.sizes[0].value}</td>
+            <td>{entry.quantity}</td>
+            <td>{entry.price}</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
           {/* all this needs to be looped  */}
         </div>
         <AddStockModal isOpen={isAddModalOpen} onClose={handleCloseAddModal} onProductSelect={handleEditClick}/>
-      <EditStockModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
+      <EditStockModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} onFormSubmit={handleFormSubmit} />
     </div>
     </>
 

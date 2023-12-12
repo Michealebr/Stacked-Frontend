@@ -28,6 +28,7 @@ function createWindow() {
     transparent: true, // Enable transparency
     width: 1200,
     height: 700,
+
   })
 
   // Test active push message to Renderer-process.
