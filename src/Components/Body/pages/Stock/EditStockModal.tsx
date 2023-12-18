@@ -4,10 +4,13 @@ import EditStock from './EditStock';
 interface EditStockModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onFormSubmit: (formData: StockEntry) => void;
+    // onFormSubmit: (formData: StockEntry) => void;
+    onFormSubmit: (selectedProduct: Product, formData: StockEntry) => void;
+    selectedProduct: Product | null; 
   }
 
-  const EditStockModal: React.FC<EditStockModalProps> = ({ isOpen, onClose, onFormSubmit }) => {
+  const EditStockModal: React.FC<EditStockModalProps> = ({ isOpen, onClose, onFormSubmit, selectedProduct }) => {
+    
     if (!isOpen) {
       return null;
     }
@@ -32,7 +35,7 @@ interface EditStockModalProps {
     return (
       <div className="modal modal2">
         <div className="modal-content mc2">
-          <EditStock onClose={onClose} onFormSubmit={onFormSubmit} />
+          <EditStock onClose={onClose} onFormSubmit={onFormSubmit} selectedProduct={selectedProduct || {}} />
         </div>
       </div>
     );

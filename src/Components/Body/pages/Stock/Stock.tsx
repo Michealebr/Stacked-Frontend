@@ -3,10 +3,10 @@ import "./Stock.css"
 import FilterIcon from 'src/assets/Filter.svg'
 import AddIcon from 'src/assets/Add.svg'
 import SearchIcon from 'src/assets/Search.svg'
-import Shoe from 'src/assets/Shoe.svg'
-import Edit from 'src/assets/Edit.svg'
-import Sold from 'src/assets/Sold.svg'
-import Cross from 'src/assets/X.svg'
+// import Shoe from 'src/assets/Shoe.svg'
+// import Edit from 'src/assets/Edit.svg'
+// import Sold from 'src/assets/Sold.svg'
+// import Cross from 'src/assets/X.svg'
 import DropDownBtn from '@/Components/UsefulComponents/DropDownBtn'
 import AddStockModal from './AddStockModal';
 import EditStockModal from './EditStockModal';
@@ -20,11 +20,20 @@ interface StockEntry {
 }
 
 
-const Stock = () => {
+const Stock: React.FC = () => {
 
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [stockEntries, setStockEntries] = useState<StockEntry[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+
+  const productStockFilter = [
+    { value: 'Size', label: 'Size' },
+    { value: 'Newest', label: 'Newest' },
+    { value: 'Oldest', label: 'Oldest' },
+ 
+  ];
 
   const handleAddClick = () => {
     setAddModalOpen(true);
@@ -36,10 +45,11 @@ const Stock = () => {
   //   // Open the Edit modal
   //   setEditModalOpen(true);
   // };
-  const handleEditClick = () => {
+  const handleEditClick = (product: Product) => {
     // Fetch data for the product based on productId
     // Set the data to a state variable
     // Open the Edit modal
+    setSelectedProduct(product);
     setEditModalOpen(true);
   };
 
@@ -52,17 +62,35 @@ const Stock = () => {
   };
 
 
-  const handleFormSubmit = (formData: StockEntry) => {
-    setStockEntries((prevStockEntries) => [...prevStockEntries, formData]);
-    console.log("Form submitted with data:", formData);
-  };
+  // const handleFormSubmit = (formData: StockEntry) => {
+  //   setStockEntries((prevStockEntries) => [...prevStockEntries, formData]);
+  //   console.log("Form submitted with data:", formData);
+  // };
+  // const handleFormSubmit = (selectedProduct: Product, formData: StockEntry) => {
+  //   const newProductData: StockEntry = {
+  //     productName: selectedProduct.name,
+  //     // ... other keys
+  //     ...formData,
+  //   };
+  
+  //   setStockEntries((prevStockEntries) => [...prevStockEntries, newProductData]);
+  //   console.log("Form submitted with data:", newProductData);
+  // };
 
-  const productStockFilter = [
-    { value: 'Size', label: 'Size' },
-    { value: 'Newest', label: 'Newest' },
-    { value: 'Oldest', label: 'Oldest' },
- 
-  ];
+  const handleFormSubmit = (formData: StockEntry) => {
+    if (selectedProduct) {
+      const newProductData: StockEntry = {
+        ...formData,
+      };
+
+      setStockEntries((prevStockEntries) => [...prevStockEntries, newProductData]);
+      console.log(newProductData);
+      // Optionally, you can reset the selected product
+      setSelectedProduct(null);
+    }
+
+
+};
   return (
     <>
     <div className='page page-layout'>
@@ -127,8 +155,8 @@ const Stock = () => {
       </table>
           {/* all this needs to be looped  */}
         </div>
-        <AddStockModal isOpen={isAddModalOpen} onClose={handleCloseAddModal} onProductSelect={handleEditClick}/>
-      <EditStockModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} onFormSubmit={handleFormSubmit} />
+        <AddStockModal isOpen={isAddModalOpen} onClose={handleCloseAddModal} onProductSelect={handleEditClick} />
+      <EditStockModal isOpen={isEditModalOpen} onClose={handleCloseEditModal} onFormSubmit={handleFormSubmit}  selectedProduct={selectedProduct}/>
     </div>
     </>
 

@@ -1,6 +1,5 @@
 import "./EditStock.css";
 import Cross from "src/assets/X.svg";
-import Shoe from "src/assets/Shoe.svg";
 import { useState, useEffect } from "react";
 import DropdownButton from "../../DropdownButton";
 
@@ -14,6 +13,7 @@ interface SelectSizeBtn {
 interface EditStockProps {
   onClose: () => void;
   onFormSubmit: (formData: any) => void;
+  selectedProduct: Product;
 }
 const shoeSizeFilter = [
   { value: "UK", label: "UK" },
@@ -55,7 +55,8 @@ const productSizes = [
   { value: "17", label: "17", quantity: 0 },
 ];
 
-const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit }) => {
+const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedProduct }) => {
+
   // Your logic for handling the editing of an existing stock item
   const [isClicked, setClick] = useState(false);
   const handleCLick = () => {
@@ -103,7 +104,7 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit }) => {
       // Sort the updatedSizes array by size.value in ascending order
       updatedSizes.sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
 
-      console.log("Updated Sizes:", updatedSizes);
+      // console.log("Updated Sizes:", updatedSizes);
       return updatedSizes;
     });
   };
@@ -113,10 +114,21 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit }) => {
 
     // Gather form data
     const formData = {
-      img,
-      productName,
-      sku,
-      sizes: selectedSizes.map((size) => size),
+      // img,
+      // productName,
+      // sku,
+      // sizes: selectedSizes.map((size) => size),
+      // price,
+      // acquisitionDate,
+      // shippingFee,
+      img: selectedProduct.img_url,
+      productName: selectedProduct.name,
+      sku: selectedProduct.sku,
+      sizes: selectedSizes.map((size) => ({
+        value: size.value,
+        label: size.label,
+        quantity: size.quantity,
+      })),
       price,
       acquisitionDate,
       shippingFee,
@@ -125,7 +137,7 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit }) => {
     onFormSubmit(formData)
 
     // Log or perform other actions with the form data
-    console.log("Form data:", formData);
+    // console.log([formData]);
 
     // Clear form data
     setSelectedSizes([]);
@@ -146,7 +158,7 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit }) => {
   };
 
   useEffect(() => {
-    console.log("Updated Sizes:", selectedSizes);
+    // console.log("Updated Sizes:", selectedSizes);
   }, [selectedSizes]);
 
   const handleDeleteSize = (sizeToDelete: SelectSizeBtn) => {
@@ -162,10 +174,10 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit }) => {
           <img className="modal-cross" src={Cross} />
         </button>
         <div className="edit-stock-header">
-          <img className="edit-stock-img" src={Shoe} alt="product img" />
+          <img className="edit-stock-img" src={selectedProduct.img_url} alt="product img" />
           <div className="add-product-text">
-            <h3 className="product-name">Jordan 1 high Lost and Found</h3>
-            <p className="product-sku">DZ5485-612</p>
+            <h3 className="product-name">{selectedProduct.name}</h3>
+            <p className="product-sku">{selectedProduct.sku}</p>
           </div>
         </div>
         <div className="size-btn-container">

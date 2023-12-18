@@ -3,44 +3,39 @@ import "./AddStock.css";
 import SearchIcon from "src/assets/Search.svg";
 import Cross from 'src/assets/X.svg'
 import Add from 'src/assets/Add.svg'
-// import Shoe from 'src/assets/Shoe.svg'
-// import Shoe2 from 'src/assets/Shoe2.svg'
+
 
 
 
 interface AddStockProps {
   onClose: () => void;
-  onProduct: any;
-
+  onProductSelect: (selectedProduct: Product) => void;
 }
 
 
-const AddStock: React.FC<AddStockProps> = ({ onClose , onProduct}) => {
+const AddStock: React.FC<AddStockProps> = ({ onClose , onProductSelect}) => {
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [searchResults, setSearchResults] = useState<Product[]>([]);
 
   useEffect(() => {
-    // Trigger API call when searchQuery changes
-    if (searchQuery.trim() !== '') {
-      // Make your API call here with the searchQuery
-      // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
-      fetch(`http://localhost:3001/lol/browse?_search=${searchQuery}`)
-        .then(response => response.json())
-        .then(data => {
-          // Update searchResults with the data from the API
-          setSearchResults(data);
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    } else {
-      // Clear searchResults when searchQuery is empty
-      setSearchResults([]);
-    }
-  }, [searchQuery]); 
+   
+          const requestOptions: RequestInit = {
+            method: 'GET',
+            redirect: 'follow',
+          };
 
-  
+          fetch(`http://localhost:3009/api/search/${searchQuery}`, requestOptions)
+          .then(response => response.json())
+          .then(result => setSearchResults(result))
+          .catch(error => console.log('error', error));
+    
+      }, [searchQuery]); // Include searchQuery as a dependency
+
+      function handleProductClick(product: Product) {
+        onProductSelect(product);
+      }
+
 
   return (
     <div className="modal-container">
@@ -59,12 +54,12 @@ const AddStock: React.FC<AddStockProps> = ({ onClose , onProduct}) => {
       <div className="add-stock-container">
         {/* each product line */}
         {searchResults.map((result) => (
-        <div className="each-product-container" onClick={onProduct} key={result.id} >
+        <div className="each-product-container"  onClick={() => handleProductClick(result)} key={result.id} >
           <div className="product-info-container add-product-info-container">
-          <img className="product-img add-to-stock-img" src={result.media.smallImageUrl} alt=""/>
+          <img className="product-img add-to-stock-img" src={result.img_url} alt="product img"/>
             <div className="add-product-text">
-              <h3 className="product-name">{result.title}</h3>
-              <p className="product-sku">{result.styleId}</p>
+              <h3 className="product-name">{result.name}</h3>
+              <p className="product-sku">{result.sku}</p>
               </div>
            </div>
            <button className="add-to-edit-btn">
