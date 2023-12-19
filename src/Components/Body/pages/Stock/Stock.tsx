@@ -3,10 +3,9 @@ import "./Stock.css"
 import FilterIcon from 'src/assets/Filter.svg'
 import AddIcon from 'src/assets/Add.svg'
 import SearchIcon from 'src/assets/Search.svg'
-// import Shoe from 'src/assets/Shoe.svg'
-// import Edit from 'src/assets/Edit.svg'
-// import Sold from 'src/assets/Sold.svg'
-// import Cross from 'src/assets/X.svg'
+import Edit from 'src/assets/Edit.svg'
+import Sold from 'src/assets/Sold.svg'
+import Cross from 'src/assets/X.svg'
 import DropDownBtn from '@/Components/UsefulComponents/DropDownBtn'
 import AddStockModal from './AddStockModal';
 import EditStockModal from './EditStockModal';
@@ -16,7 +15,14 @@ interface StockEntry {
   productName: string;
   size: string;
   quantity: number;
-  price: number;
+  totalcost: number;
+  sku: string;
+  img: string;
+  sizes: string;
+  value: string;
+  acquisitionDate: string;
+  expectedSalePrice: number;
+  expectedProfit: number
 }
 
 
@@ -61,21 +67,6 @@ const Stock: React.FC = () => {
     setEditModalOpen(false);
   };
 
-
-  // const handleFormSubmit = (formData: StockEntry) => {
-  //   setStockEntries((prevStockEntries) => [...prevStockEntries, formData]);
-  //   console.log("Form submitted with data:", formData);
-  // };
-  // const handleFormSubmit = (selectedProduct: Product, formData: StockEntry) => {
-  //   const newProductData: StockEntry = {
-  //     productName: selectedProduct.name,
-  //     // ... other keys
-  //     ...formData,
-  //   };
-  
-  //   setStockEntries((prevStockEntries) => [...prevStockEntries, newProductData]);
-  //   console.log("Form submitted with data:", newProductData);
-  // };
 
   const handleFormSubmit = (formData: StockEntry) => {
     if (selectedProduct) {
@@ -132,23 +123,44 @@ const Stock: React.FC = () => {
           <table>
         <thead>
           <tr>
-            <th>img</th>
-            <th>name & sku</th>
-            <th>size</th>
-            <th>Purchase Price</th>
-            <th>expected sale price</th>
-            <th>expected profit</th>
-            <th>Purchase date</th>
-            <th>Product btn</th>
+            <th id='img'></th>
+            <th id='name-sku'></th>
+            <th id='size'></th>
+            <th id='purchase-price'></th>
+            <th id='expected-sale-price'></th>
+            <th id='expected-profit'></th>
+            <th id='purchase-date'></th>
+            <th id='Product-btn'></th>
           </tr>
         </thead>
         <tbody>
            {stockEntries.map((entry, index) => (
-          <tr key={index}>
-            <td>{entry.productName}</td>
-            <td>{entry.sizes[0].value}</td>
-            <td>{entry.quantity}</td>
-            <td>{entry.price}</td>
+          <tr key={index} className='product-line'>
+            <div className="info-container">
+            <td>
+              <img className="product-img" src={entry.img} alt="product img" />
+            </td>
+            <td className="product-name">
+              {entry.productName}
+              <p className="product-sku">{entry.sku}</p>
+            </td>
+            
+            <td className="stock-text" id='size'>UK {entry.sizes[0].value}</td>
+            </div>
+            <div className="product-price-container">
+            <td className="stock-text">${entry.totalcost}</td>
+            <td className="stock-text">${entry.expectedSalePrice}</td>
+            <td className="stock-text">{entry.expectedProfit}</td>
+            </div>
+            <td className="stock-text">{entry.acquisitionDate}</td>
+            <td>
+            <div className="icon-container">
+            <button className='icon-btn' onClick={handleEditClick}><img className='edit-icon' src={Edit} alt='edit'/></button>
+            <button className='icon-btn'> <img className='edit-icon' src={Sold} alt='sold'/></button>
+            <button className='icon-btn'> <img className='edit-icon' src={Cross} alt='cross'/></button>
+           </div>
+            </td>
+
           </tr>
         ))}
         </tbody>

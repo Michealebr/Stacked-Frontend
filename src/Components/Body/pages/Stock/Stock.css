@@ -64,18 +64,20 @@
 .product-line{
     display: flex;
     height: 90px;
-    border-bottom: 1px solid #ededed;
+    border-bottom: 1px solid #efefef;
     margin: 0px 30px;
     align-items: center;
     justify-content: space-between;
+    width: 980px;
     
 }
 .product-img{
-    width: 80px;
+    width: 70px;
     margin-right: 20px;
 }
 .info-container{
     display: flex;
+    align-items: center;
 
 }
 .product-info-container{
@@ -90,12 +92,15 @@
 }
 .product-name{
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13px;
     margin: 0px;
     padding: 0px;
     text-align: left;
     overflow: hidden; /* Hide overflow text */
     text-overflow: ellipsis; /* Display ellipsis for overflow text */
+    width: 200px;
+    margin-right: 20px;
+
 }
 .product-sku{
     text-align: left;
@@ -109,12 +114,13 @@
 }
 .icon-container{
     display: flex;
-    gap: 10px;
+    gap: 15px;
 }
 .icon-btn{
     border: none;
-    background-color: white;
+    background-color: transparent;
     cursor: pointer;
+    padding: 0px;
 }
 .edit-icon{
     /* width: 18px; */
@@ -126,4 +132,40 @@ p{
 }
 .stock-filter{
     min-width: 100%;
+}
+.stock-list-img{
+    height: 60px;
+}
+
+#img{
+width: 90px;
+padding: 0px;
+}
+#name-sku{
+    width: 260px;
+}
+#size{
+    width: 50px;
+}
+#purchase-price{
+    width: 80px;
+}
+#expected-sale-price{
+    width: 80px;
+}
+#expected-profit{
+    width: 80px;
+
+}
+#purchase-date{
+    width: 120px;
+}
+#Product-btn{
+    width: 150px;
+    
+}
+
+.stock-text{
+    font-size: 13px;
+    font-weight: 500;
 }

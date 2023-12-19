@@ -69,18 +69,15 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
     setClick(!isClicked);
   };
 
+  const currentDate = new Date().toISOString().split("T")[0];
+
   // for the form
 
   const [selectedSizes, setSelectedSizes] = useState<Array<SelectSizeBtn>>([]);
   const [price, setPrice] = useState<number>();
-  const [acquisitionDate, setAcquisitionDate] = useState<string>("");
-  // const [defaultDate, setDefaultDate] = useState<string>("")
+  const [acquisitionDate, setAcquisitionDate] = useState<string>(() => currentDate);
   const [shippingFee, setShippingFee] = useState<number>();
-
-  const currentDate = new Date().toISOString().split("T")[0];
-
-  // setAcquisitionDate(currentDate)
-  // setDefaultDate(currentDate)
+const [expectedSalePrice, setEpectedSalePrice] = useState<number>()
 
   const handleSizeInteraction = (size: SelectSizeBtn, newQuantity?: number) => {
     setSelectedSizes((prevSizes) => {
@@ -104,7 +101,6 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
       // Sort the updatedSizes array by size.value in ascending order
       updatedSizes.sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
 
-      // console.log("Updated Sizes:", updatedSizes);
       return updatedSizes;
     });
   };
@@ -112,15 +108,11 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+const totalcost = price + shippingFee
+const expectedProfit =  expectedSalePrice - totalcost 
+
     // Gather form data
     const formData = {
-      // img,
-      // productName,
-      // sku,
-      // sizes: selectedSizes.map((size) => size),
-      // price,
-      // acquisitionDate,
-      // shippingFee,
       img: selectedProduct.img_url,
       productName: selectedProduct.name,
       sku: selectedProduct.sku,
@@ -129,15 +121,17 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
         label: size.label,
         quantity: size.quantity,
       })),
-      price,
+      totalcost,
       acquisitionDate,
       shippingFee,
+      expectedSalePrice,
+      expectedProfit,
     };
 
     onFormSubmit(formData)
 
     // Log or perform other actions with the form data
-    // console.log([formData]);
+    // console.log(formData);
 
     // Clear form data
     setSelectedSizes([]);
@@ -158,7 +152,6 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
   };
 
   useEffect(() => {
-    // console.log("Updated Sizes:", selectedSizes);
   }, [selectedSizes]);
 
   const handleDeleteSize = (sizeToDelete: SelectSizeBtn) => {
@@ -199,6 +192,7 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
           </div>
         </div>
         {/* sizes */}
+        <div className="form-scroll">
         <div className="product-size-container">
           {productSizes.map((eachSize) => (
             <button
@@ -278,8 +272,11 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
               type="date"
               required
               max={currentDate}
-              defaultValue={currentDate}
-              onChange={(e) => setAcquisitionDate(e.target.value)}
+              value={acquisitionDate || currentDate}
+              onChange={(e) => {
+                const newDate = e.target.value;
+                setAcquisitionDate(newDate !== currentDate ? newDate : currentDate);
+              }}
             />
           </div>
 
@@ -295,11 +292,25 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
               onChange={(e) => setShippingFee(Number(e.target.value))}
             />
           </div>
+
+          <div className="input-price-info">
+            <label className="price-input-label" htmlFor="purchaseDate">
+              Expected Sale Price*
+            </label>
+            <input
+              className="input-info-ps"
+              type="number"
+              required
+              value={expectedSalePrice}
+              onChange={(e) => setEpectedSalePrice(Number(e.target.value))}
+            />
+          </div>
         </div>
 
         <button className="submit-form-btn" type="submit">
           Add Stock
         </button>
+        </div>
       </form>
     </div>
   );

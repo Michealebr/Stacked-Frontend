@@ -12,10 +12,10 @@
   padding: 1.5em;
 }
 .page{
-  padding-left: 140px ;
-  padding-right: 40px ;
-  width: 970px;
+  padding-left: 110px ;
+  padding-right: 10px ;
+  width: 1050px;
   height: 100vh;
-  overflow-y: hidden;
-  overflow: none;
+  /* overflow-y: hidden; */
+  /* overflow: none; */
 }
