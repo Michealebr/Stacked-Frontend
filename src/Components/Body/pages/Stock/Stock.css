@@ -3,6 +3,11 @@
     border-radius: 10px;
     height: 520px;
     box-shadow: 0.2rem .2rem .5rem rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    padding: 10px 0px;
+
 }
 .page-header{
     height: 100px;
@@ -63,12 +68,13 @@
 
 .product-line{
     display: flex;
-    height: 90px;
+    height: 71px;
     border-bottom: 1px solid #efefef;
     margin: 0px 30px;
     align-items: center;
     justify-content: space-between;
     width: 980px;
+    margin-bottom: 1px;
     
 }
 .product-img{
@@ -100,6 +106,7 @@
     text-overflow: ellipsis; /* Display ellipsis for overflow text */
     width: 200px;
     margin-right: 20px;
+
 
 }
 .product-sku{
