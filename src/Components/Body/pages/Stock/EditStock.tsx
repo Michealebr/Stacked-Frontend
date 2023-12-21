@@ -128,10 +128,21 @@ const expectedProfit =  expectedSalePrice - totalcost
       expectedProfit,
     };
 
+  //   const entries = selectedSizes.flatMap((size) =>
+  //   Array.from({ length: size.quantity }, (_, index) => ({
+  //     ...formData,
+  //     sizes: [{ value: size.value, label: size.label, quantity: 1 }],
+  //     totalcost: price + shippingFee,
+  //     expectedProfit: expectedSalePrice - (price + shippingFee),
+  //   }))
+  // );
+
+  
+
     onFormSubmit(formData)
 
     // Log or perform other actions with the form data
-    // console.log(formData);
+    console.log(formData);
 
     // Clear form data
     setSelectedSizes([]);

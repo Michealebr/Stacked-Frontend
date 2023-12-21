@@ -67,21 +67,49 @@ const Stock: React.FC = () => {
     setEditModalOpen(false);
   };
 
+// const handleFormSubmit = (formData: StockEntry) => {
+//     if (selectedProduct) {
+//       const newProductData: StockEntry = {
+//         ...formData,
+//       };
 
-  const handleFormSubmit = (formData: StockEntry) => {
-    if (selectedProduct) {
-      const newProductData: StockEntry = {
-        ...formData,
-      };
+//       setStockEntries((prevStockEntries) => [...prevStockEntries, newProductData]);
+//       console.log(newProductData);
+//       // Optionally, you can reset the selected product
+//       setSelectedProduct(null);
+//     }
+// };
 
-      setStockEntries((prevStockEntries) => [...prevStockEntries, newProductData]);
-      console.log(newProductData);
-      // Optionally, you can reset the selected product
-      setSelectedProduct(null);
+const handleFormSubmit = (formData: StockEntry) => {
+  if (selectedProduct) {
+    const { sizes, ...restFormData } = formData;
+
+    if (sizes && sizes.length > 0) {
+      // Create a new entry for each size and quantity
+      const newProductData = sizes.flatMap((size) => {
+        const entries = [];
+        for (let i = 0; i < size.quantity; i++) {
+          entries.push({
+            ...restFormData,
+            sizes: [{ ...size, quantity: 1 }],
+          });
+        }
+        return entries;
+      });
+// current state gets updated to previous stock and new products 
+      setStockEntries((prevStockEntries) => [...newProductData, ...prevStockEntries ]);
+    } else {
+      // If there are no sizes, just add the original entry
+      setStockEntries((prevStockEntries) => [...prevStockEntries, formData]);
     }
 
-
+    // Optionally, you can reset the selected product
+    setSelectedProduct(null);
+  }
 };
+
+
+
   return (
     <>
     <div className='page page-layout'>
@@ -145,7 +173,7 @@ const Stock: React.FC = () => {
               <p className="product-sku">{entry.sku}</p>
             </td>
             
-            <td className="stock-text" id='size'>UK {entry.sizes[0].value}</td>
+            <td className="stock-text" id='size'> {entry.sizes && entry.sizes.length > 0 && `UK ${entry.sizes[0].value}`}</td>
             </div>
             <div className="product-price-container">
             <td className="stock-text">${entry.totalcost}</td>
@@ -163,6 +191,7 @@ const Stock: React.FC = () => {
 
           </tr>
         ))}
+      
         </tbody>
       </table>
           {/* all this needs to be looped  */}
@@ -176,3 +205,4 @@ const Stock: React.FC = () => {
 }
 
 export default Stock
+  
