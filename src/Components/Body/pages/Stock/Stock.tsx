@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import "./Stock.css"
 import FilterIcon from 'src/assets/Filter.svg'
 import AddIcon from 'src/assets/Add.svg'
@@ -18,7 +18,7 @@ interface StockEntry {
   totalcost: number;
   sku: string;
   img: string;
-  sizes: string;
+  sizes: string | [];
   value: string;
   acquisitionDate: string;
   expectedSalePrice: number;
@@ -80,35 +80,105 @@ const Stock: React.FC = () => {
 //     }
 // };
 
-const handleFormSubmit = (formData: StockEntry) => {
-  if (selectedProduct) {
-    const { sizes, ...restFormData } = formData;
+// this works
 
-    if (sizes && sizes.length > 0) {
-      // Create a new entry for each size and quantity
-      const newProductData = sizes.flatMap((size) => {
-        const entries = [];
-        for (let i = 0; i < size.quantity; i++) {
-          entries.push({
-            ...restFormData,
-            sizes: [{ ...size, quantity: 1 }],
-          });
+// const handleFormSubmit = (formData: StockEntry) => {
+//   if (selectedProduct) {
+//     const { sizes, ...restFormData } = formData;
+
+//     if (sizes && sizes.length > 0) {
+//       // Create a new entry for each size and quantity
+//       const newProductData = sizes.flatMap((size) => {
+//         const entries = [];
+//         for (let i = 0; i < size.quantity; i++) {
+//           entries.push({
+//             ...restFormData,
+//             sizes: [{ ...size, quantity: 1 }],
+//           });
+//         }
+
+//         return entries;
+//       });
+//       console.log(newProductData)
+// // current state gets updated to previous stock and new products 
+//       setStockEntries((prevStockEntries) => [...newProductData, ...prevStockEntries ]);
+//     } else {
+//       // If there are no sizes, just add the original entry
+//       setStockEntries((prevStockEntries) => [...prevStockEntries, formData]);
+//     }
+
+//     // Optionally, you can reset the selected product
+//     setSelectedProduct(null);
+//   }
+// };
+
+const handleFormSubmit = async (formData: StockEntry) => {
+  try {
+    if (selectedProduct) {
+      const { sizes , ...restFormData } = formData;
+
+      if (sizes && sizes.length > 0) {
+        // Create a new entry for each size and quantity
+        const newProductData = sizes.flatMap((size) => {
+          const entries = [];
+          for (let i = 0; i < size.quantity; i++) {
+            entries.push({
+              ...restFormData,
+              sizes: [{ ...size, quantity: 1 }],
+            });
+          }
+
+          return entries;
+        });
+        console.log(newProductData)
+
+        // Send the newProductData array to the server
+        const response = await fetch('http://localhost:3009/api/submitStock', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // body: JSON.stringify(newProductData),
+          body: JSON.stringify( newProductData ),
+        });
+
+        if (response.ok) {
+          // Optionally, handle success on the client side
+          console.log('Data submitted successfully');
+          // Reset the form or perform any other necessary actions
+
+          fetchData();
+        } else {
+          const responseData = await response.json();
+          console.error('Error submitting data:', response.status, response.statusText, responseData.details);
+          // Handle errors, show a message to the user, etc.
         }
-        return entries;
-      });
-// current state gets updated to previous stock and new products 
-      setStockEntries((prevStockEntries) => [...newProductData, ...prevStockEntries ]);
-    } else {
-      // If there are no sizes, just add the original entry
-      setStockEntries((prevStockEntries) => [...prevStockEntries, formData]);
+      }
     }
-
-    // Optionally, you can reset the selected product
-    setSelectedProduct(null);
+  } catch (error) {
+    console.error('Error submitting data:', error);
+    // Handle errors, show a message to the user, etc.
   }
 };
 
 
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3009/api/stocklist');
+      if (response.ok) {
+        const data = await response.json();
+        setStockEntries(data);
+      } else {
+        console.error('Error fetching data:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchData();
+}, []); // The empty dependency array ensures this effect runs only once when the component mounts
 
   return (
     <>
@@ -166,21 +236,21 @@ const handleFormSubmit = (formData: StockEntry) => {
           <tr key={index} className='product-line'>
             <div className="info-container">
             <td>
-              <img className="product-img" src={entry.img} alt="product img" />
+              <img className="product-img" src={entry.img_url} alt="product img" />
             </td>
             <td className="product-name">
-              {entry.productName}
-              <p className="product-sku">{entry.sku}</p>
+              {entry.product_name}
+              <p className="product-sku">{entry.product_sku}</p>
             </td>
             
             <td className="stock-text" id='size'> {entry.sizes && entry.sizes.length > 0 && `UK ${entry.sizes[0].value}`}</td>
             </div>
             <div className="product-price-container">
-            <td className="stock-text">${entry.totalcost}</td>
-            <td className="stock-text">${entry.expectedSalePrice}</td>
-            <td className="stock-text">{entry.expectedProfit}</td>
+            <td className="stock-text">${entry.purchase_price}</td>
+            <td className="stock-text">${entry.expected_sale_price}</td>
+            <td className="stock-text">{entry.expected_profit}</td>
             </div>
-            <td className="stock-text">{entry.acquisitionDate}</td>
+            <td className="stock-text">{entry.acquisition_date.split("T")[0]}</td>
             <td>
             <div className="icon-container">
             <button className='icon-btn' onClick={handleEditClick}><img className='edit-icon' src={Edit} alt='edit'/></button>
