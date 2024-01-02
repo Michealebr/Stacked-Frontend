@@ -180,7 +180,7 @@ const expectedProfit =  expectedSalePrice - totalcost
         <div className="edit-stock-header">
           <img className="edit-stock-img" src={selectedProduct.img_url} alt="product img" />
           <div className="add-product-text">
-            <h3 className="product-name">{selectedProduct.name}</h3>
+            <h3 className="product-name product-modal-name">{selectedProduct.name}</h3>
             <p className="product-sku">{selectedProduct.sku}</p>
           </div>
         </div>

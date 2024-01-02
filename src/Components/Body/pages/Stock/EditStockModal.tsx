@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import EditStock from './EditStock';
-
+import "./EditExistingProducts.css";
 interface EditStockModalProps {
     isOpen: boolean;
     onClose: () => void;

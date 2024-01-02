@@ -9,6 +9,7 @@ import Cross from "src/assets/X.svg";
 import DropDownBtn from "@/Components/UsefulComponents/DropDownBtn";
 import AddStockModal from "./AddStockModal";
 import EditStockModal from "./EditStockModal";
+import EditBtnModal from "./EditBtnModal";
 
 interface StockEntry {
   product_name: string;
@@ -28,6 +29,7 @@ interface Product {}
 const Stock: React.FC = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isEditBtnModalOpen, setEditBtnModalOpen] = useState(false);
   const [stockEntries, setStockEntries] = useState<StockEntry[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [fetchTrigger, setFetchTrigger] = useState(0);
@@ -42,16 +44,9 @@ const Stock: React.FC = () => {
     setAddModalOpen(true);
   };
 
-  // const handleEditClick = (productId: string) => {
-  //   // Fetch data for the product based on productId
-  //   // Set the data to a state variable
-  //   // Open the Edit modal
-  //   setEditModalOpen(true);
-  // };
+  
+
   const handleEditClick = (product: Product) => {
-    // Fetch data for the product based on productId
-    // Set the data to a state variable
-    // Open the Edit modal
     setSelectedProduct(product);
     setEditModalOpen(true);
   };
@@ -142,9 +137,7 @@ const Stock: React.FC = () => {
 
   // function to delete stocklist item
 
-  // const handleDeleteClick = async (userId: string , productId: string) => {
-
-  // }
+  // const handleDeleteClick = async (userId: string , productId: string) => {}
 
   const handleDeleteClick = async (productId: string) => {
     try {
@@ -181,6 +174,37 @@ const Stock: React.FC = () => {
 
   // function to take to sold stock modal
   // function to edit stock item
+
+  const fetchDataForEdit = async (productId: string) => {
+    try {
+      // Fetch the existing data for the product
+      const response = await fetch(`http://localhost:3009/api/updateStock/${productId}`);
+  
+      if (response.ok) {
+        // Parse the response to get the existing product data
+        const existingProductData = await response.json();
+  
+        // Set the selected product with the existing data
+        setSelectedProduct(existingProductData);
+        // Open the Edit modal
+        setEditBtnModalOpen(true);
+      } else {
+        // Handle error responses
+        console.error(
+          "Error fetching data:",
+          response.status,
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+  const handleEditBtn = (productId: string) => {
+    // Call the function to fetch and populate the modal with existing data
+    fetchDataForEdit(productId);
+  };
 
   return (
     <>
@@ -256,7 +280,7 @@ const Stock: React.FC = () => {
                   </td>
                   <td>
                     <div className="icon-container">
-                      <button className="icon-btn" onClick={handleEditClick}>
+                      <button className="icon-btn"  onClick={() => handleEditBtn(entry.stock_id)}>
                         <img className="edit-icon" src={Edit} alt="edit" />
                       </button>
                       <button className="icon-btn">
@@ -291,6 +315,12 @@ const Stock: React.FC = () => {
           onClose={handleCloseEditModal}
           onFormSubmit={handleFormSubmit}
           selectedProduct={selectedProduct}
+        />
+        < EditBtnModal
+        isOpen={isEditBtnModalOpen}
+        onClose={handleCloseEditModal}
+        selectedProduct={selectedProduct}
+
         />
       </div>
     </>

@@ -2,6 +2,9 @@
     height: inherit;
     padding: 0px 0px;
 }
+.product-modal-name{
+    width: 90%;
+}
 
 form{
     height: inherit;

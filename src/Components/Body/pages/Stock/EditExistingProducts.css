@@ -1,0 +1,12 @@
+.edit-modal-header{
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ededed;
+}
+.edit-info-container{
+    padding-top:15px ;
+    padding-bottom:25px ;
+    border-bottom: 1px solid #ededed;
+}
+.edit-modal{
+    height: 300px;
+}
