@@ -34,8 +34,8 @@ const productSizes = [
   { value: "4.5", label: "4.5", quantity: 0 },
   { value: "5", label: "5", quantity: 0 },
   { value: "5.5", label: "5.5", quantity: 0 },
-  { value: "6 EU39", label: "6 (39)", quantity: 0 },
-  { value: "6 EU40", label: "6 (40)", quantity: 0 },
+  { value: "6 (39)", label: "6 (39)", quantity: 0 },
+  { value: "6 (40)", label: "6 (40)", quantity: 0 },
   { value: "6.5", label: "6.5", quantity: 0 },
   { value: "7", label: "7", quantity: 0 },
   { value: "7.5", label: "7.5", quantity: 0 },
@@ -76,8 +76,10 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
   const [selectedSizes, setSelectedSizes] = useState<Array<SelectSizeBtn>>([]);
   const [price, setPrice] = useState<number>();
   const [acquisitionDate, setAcquisitionDate] = useState<string>(() => currentDate);
-  const [shippingFee, setShippingFee] = useState<number>();
+  const [shippingFee, setShippingFee] = useState<number>(0);
 const [expectedSalePrice, setEpectedSalePrice] = useState<number>()
+
+const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleSizeInteraction = (size: SelectSizeBtn, newQuantity?: number) => {
     setSelectedSizes((prevSizes) => {
@@ -107,6 +109,14 @@ const [expectedSalePrice, setEpectedSalePrice] = useState<number>()
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // need to pass the shipping fee as its own pram 
+    // dont pass totalcost to mysql instead price and shippingprice 
+
+    if (selectedSizes.length === 0) {
+      // Show an error message or perform any other action to notify the user
+      setErrorMessage('Please select at least one size.');
+      return;
+    }
 
 const totalcost = price + shippingFee
 const expectedProfit =  expectedSalePrice - totalcost 
@@ -121,6 +131,7 @@ const expectedProfit =  expectedSalePrice - totalcost
         label: size.label,
         quantity: size.quantity,
       })),
+      price,
       totalcost,
       acquisitionDate,
       shippingFee,
@@ -128,21 +139,13 @@ const expectedProfit =  expectedSalePrice - totalcost
       expectedProfit,
     };
 
-  //   const entries = selectedSizes.flatMap((size) =>
-  //   Array.from({ length: size.quantity }, (_, index) => ({
-  //     ...formData,
-  //     sizes: [{ value: size.value, label: size.label, quantity: 1 }],
-  //     totalcost: price + shippingFee,
-  //     expectedProfit: expectedSalePrice - (price + shippingFee),
-  //   }))
-  // );
-
-  
 
     onFormSubmit(formData)
 
     // Log or perform other actions with the form data
     console.log(formData);
+    setErrorMessage('');
+
 
     // Clear form data
     setSelectedSizes([]);
@@ -198,12 +201,15 @@ const expectedProfit =  expectedSalePrice - totalcost
             {shoeSizeFilter.map((size) => (
               <div key={size.value} onClick={() => handleSizeClicked(size)}>
                 {size.label}
+                
               </div>
             ))}
+            
           </div>
         </div>
         {/* sizes */}
         <div className="form-scroll">
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <div className="product-size-container">
           {productSizes.map((eachSize) => (
             <button
@@ -212,6 +218,8 @@ const expectedProfit =  expectedSalePrice - totalcost
               onClick={(e) => {
                 e.preventDefault(); // Prevent the form from submitting
                 // handleSelectedSize(eachSize);
+    setErrorMessage('');
+                
                 handleSizeInteraction(eachSize);
               }}
             >

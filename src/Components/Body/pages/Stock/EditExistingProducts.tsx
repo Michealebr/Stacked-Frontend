@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
 import Cross from "src/assets/X.svg";
 import DropdownButton from "../../DropdownButton";
+// import { Product } from 'electron';
 
 
 interface EditBtnModalProps {
     isOpen: boolean;
     onClose: () => void;
     // onProductSelect: (selectedProduct: Product) => void;
-    selectedProduct: []
+    selectedProduct: Product;
+    // updateStockList: number;
   }
 
+  type Product = {
+    user_id: number;
+    stock_id: number;
+    img_url: string;
+    product_name: string;
+    product_sku: string;
+    purchase_price: number;
+    sizes: number;
+    expected_sale_price: number;
+    expected_profit: number;
+    acquisition_date: string;
+    total_cost: number;
+    shipping_cost: number;
+    price: number
+  }
   const currency = [
     { value: "£", label: "£" },
     { value: "$", label: "$" },
@@ -18,7 +35,7 @@ interface EditBtnModalProps {
 
   
 
-const EditExistingProducts: React.FC<EditBtnModalProps> = ({ onClose , selectedProduct }) => {
+const EditExistingProducts: React.FC<EditBtnModalProps> = ({ onClose , selectedProduct, updateStockList }) => {
 
 
     const currentDate = new Date().toISOString().split("T")[0];
@@ -28,7 +45,7 @@ const EditExistingProducts: React.FC<EditBtnModalProps> = ({ onClose , selectedP
   const [selectedSizes, setSelectedSizes] = useState<Array<SelectSizeBtn>>([selectedProduct.sizes[0].value]);
   const [price, setPrice] = useState<number>(selectedProduct.purchase_price);
   const [acquisitionDate, setAcquisitionDate] = useState<string>(() => selectedProduct.acquisition_date.split("T")[0]);
-  const [shippingFee, setShippingFee] = useState<number>(0);
+  const [shippingFee, setShippingFee] = useState<number>(selectedProduct.shipping_cost);
 const [expectedSalePrice, setEpectedSalePrice] = useState<number>(selectedProduct.expected_sale_price)
 
 const handleBlur = (value: number | string, setState: React.Dispatch<React.SetStateAction<number | string>>) => {
@@ -37,14 +54,62 @@ const handleBlur = (value: number | string, setState: React.Dispatch<React.SetSt
     }
   };
 
-//   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-//   }
-// onSubmit={handleFormSubmit}
+  // submit the form to endpoint to update data 
+
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const totalcost = parseFloat(price) + parseFloat(shippingFee);
+    console.log(price)
+    console.log(shippingFee)
+    console.log(totalcost)
+
+
+    const expectedProfit =  expectedSalePrice - totalcost 
+    
+      const updatedProduct = {
+        ...selectedProduct,
+        // sizes[0].label: selectedSizes,
+        // sizes[0].value: selectedSizes,
+        sizes: parseFloat(selectedSizes),
+        expected_sale_price: expectedSalePrice,
+        purchase_price: parseFloat(price),
+        expected_profit: expectedProfit,
+        shipping_cost: parseFloat(shippingFee),
+        total_cost: totalcost,
+        acquisition_date: acquisitionDate,
+      }
+      // Send the updated product data to the server
+      const response = await fetch(`http://localhost:3009/api/updateStock/${selectedProduct.stock_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProduct),
+      });
+
+      if (response.ok) {
+        updateStockList()
+        // Optionally, handle success on the client side
+        console.log('Data updated successfully');
+        // Reset the form or close the modal
+        onClose();
+      } else {
+        const responseData = await response.json();
+        console.error('Error updating data:', response.status, response.statusText, responseData.details);
+        // Handle errors, show a message to the user, etc.
+      }
+    } catch (error) {
+      console.error('Error updating data:', error);
+      // Handle errors, show a message to the user, etc.
+    }
+  }
+// 
 
   return (
     <div className="modal-container">
-    <form >
+    <form onSubmit={handleFormSubmit}>
       <button className="close-btn" onClick={onClose}>
         <img className="modal-cross" src={Cross} />
       </button>

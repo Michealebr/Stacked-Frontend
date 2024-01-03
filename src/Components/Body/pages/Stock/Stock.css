@@ -66,7 +66,7 @@
     padding: 0px 5px;
 }
 
-.product-line{
+/* .product-line{
     display: flex;
     height: 71px;
     border-bottom: 1px solid #efefef;
@@ -76,10 +76,12 @@
     width: 980px;
     margin-bottom: 1px;
     
-}
+} */
 .product-img{
-    width: 70px;
-    margin-right: 20px;
+    /* width: 70px; */
+    width: 60px;
+    margin-right: 15px;
+    margin-left: 15px;
 }
 .info-container{
     display: flex;
@@ -98,19 +100,22 @@
 }
 .product-name{
     font-weight: 500;
-    font-size: 13px;
+    font-size: 12px;
     margin: 0px;
     padding: 0px;
     text-align: left;
     overflow: hidden; /* Hide overflow text */
     text-overflow: ellipsis; /* Display ellipsis for overflow text */
-    width: 200px;
-    margin-right: 20px;
+    width: 180px;
+    /* margin-right: 20px; */
+    padding-right: 40px;
+
+
 }
 .product-sku{
     text-align: left;
     margin: 0px;
-    font-size: 12px;
+    font-size: 11px;
     color: rgb(101, 102, 103);
 }
 .product-price-container{
@@ -133,7 +138,7 @@
 }
 
 p{
-    font-size: 13px;
+    font-size: 12px;
 }
 .stock-filter{
     min-width: 100%;
@@ -147,19 +152,25 @@ width: 90px;
 padding: 0px;
 }
 #name-sku{
-    width: 260px;
+    width: 180px;
+    padding-right: 40px;
+
 }
 #size{
-    width: 50px;
+    width: 85px;
+    padding-right: 25px;
 }
 #purchase-price{
-    width: 80px;
+    width: 100px;
+
 }
 #expected-sale-price{
-    width: 80px;
+    width: 100px;
+
 }
 #expected-profit{
-    width: 80px;
+    width: 100px;
+
 
 }
 #purchase-date{
@@ -171,6 +182,17 @@ padding: 0px;
 }
 
 .stock-text{
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
+    text-align: left;
+}
+.total-cost-box{
+    width: 70px;
+    /* display: flex; */
+    justify-content: left;
+}
+.th-title{
+    font-weight: 500;
+    font-size: 14px;
+    text-align: left;
 }
