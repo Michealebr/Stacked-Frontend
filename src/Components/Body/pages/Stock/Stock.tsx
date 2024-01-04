@@ -154,9 +154,9 @@ const Stock: React.FC = () => {
         // Convert numeric fields to numbers
         const formattedData = data.map(entry => ({
           ...entry,
-          total_cost: Number(entry.total_cost),
-          expected_sale_price: Number(entry.expected_sale_price),
-          expected_profit: Number(entry.expected_profit)
+          total_cost: Number(entry.total_cost).toLocaleString(),
+          expected_sale_price: Number(entry.expected_sale_price).toLocaleString(),
+          expected_profit: Number(entry.expected_profit).toLocaleString()
           
           // Add more fields as needed
         }));
@@ -283,17 +283,18 @@ const Stock: React.FC = () => {
             <thead>
               <tr>
                 <th className="th-title" id="img"></th>
-                <th className="th-title" id="name-sku">name & sku</th>
-                <th className="th-title" id="size">size</th>
-                <th className="th-title" id="purchase-price">cost</th>
-                <th className="th-title" id="expected-sale-price">projected sale price</th>
-                <th className="th-title" id="expected-profit">projected profit</th>
+                <th className="th-title" id="name-sku">Name & Sku</th>
+                <th className="th-title" id="size">Size</th>
+                <th className="th-title" id="purchase-price">Cost</th>
+                <th className="th-title" id="expected-sale-price">TSP</th>
+                <th className="th-title" id="expected-profit">Projected P/L</th>
                 <th className="th-title" id="purchase-date">Purchase Date</th>
                 <th className="th-title" id="Product-btn"></th>
               </tr>
             </thead>
             <tbody>
               {stockEntries.map((entry, index) => (
+                
                 <tr key={index} className="product-line">
                   {/* <div className="info-container"> */}
                     <td>
@@ -320,7 +321,7 @@ const Stock: React.FC = () => {
                     <td className="stock-text">${entry.expected_sale_price}</td>
                     <td className="stock-text">{entry.expected_profit}</td>
                   {/* </div> */}
-                  <td className="stock-text">
+                  <td className="stock-text date-box">
                     {entry.acquisition_date.split("T")[0]}
                   </td>
                   <td>

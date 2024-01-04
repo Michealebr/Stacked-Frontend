@@ -1,12 +1,14 @@
 .page-body{
     background-color: white;
     border-radius: 10px;
-    height: 520px;
+    /* height: 520px; */
+    height: 540px;
+
     box-shadow: 0.2rem .2rem .5rem rgba(0, 0, 0, 0.1);
     overflow: hidden;
     overflow-y: scroll;
     scroll-behavior: smooth;
-    padding: 10px 0px;
+    /* padding: 10px 0px; */
 
 }
 .page-header{
@@ -77,6 +79,19 @@
     margin-bottom: 1px;
     
 } */
+.product-line {
+    position: relative;
+    height: 70px;
+  }
+  
+  .product-line::after {
+    content: "";
+    position: absolute;
+    left: 15px; /* Adjust the left spacing as needed */
+    right: 15px; /* Adjust the right spacing as needed */
+    bottom: 0;
+    border-bottom: 1px solid #efefef;
+  }
 .product-img{
     /* width: 70px; */
     width: 60px;
@@ -130,11 +145,12 @@
     border: none;
     background-color: transparent;
     cursor: pointer;
-    padding: 0px;
+    padding: 0px 10px;
+
 }
 .edit-icon{
     /* width: 18px; */
-    height: 20px;
+    height: 17px;
 }
 
 p{
@@ -175,9 +191,11 @@ padding: 0px;
 }
 #purchase-date{
     width: 120px;
+    padding-left: 50px;
+
 }
 #Product-btn{
-    width: 150px;
+    width: 120px;
     
 }
 
@@ -193,6 +211,25 @@ padding: 0px;
 }
 .th-title{
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
     text-align: left;
+    /* height: 30px; */
+    padding-top: -100px;
 }
+.date-box{
+    padding-left: 50px;
+}
+
+thead{
+    position: sticky; 
+    top: 0px;
+    background-color: white;
+    z-index: 1; 
+height: 30px;
+padding-bottom: 20px; 
+
+
+}
+
+  
+ 
