@@ -10,6 +10,7 @@ import DropDownBtn from "@/Components/UsefulComponents/DropDownBtn";
 import AddStockModal from "./AddStockModal";
 import EditStockModal from "./EditStockModal";
 import EditBtnModal from "./EditBtnModal";
+import SoldListModal from "./SoldListModal";
 
 interface StockEntry {
   product_name: string;
@@ -31,6 +32,7 @@ const Stock: React.FC = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isEditBtnModalOpen, setEditBtnModalOpen] = useState(false);
+  const [isSoldListModalOpen, setSoldListModalOpen] = useState(false);
   const [stockEntries, setStockEntries] = useState<StockEntry[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [fetchTrigger, setFetchTrigger] = useState(0);
@@ -64,6 +66,11 @@ const Stock: React.FC = () => {
   const handleCloseBtnEditModal = () => {
     console.log("closing modal")
     setEditBtnModalOpen(false);
+  };
+
+  const handleCloseSoldListModal = () => {
+    console.log("closing modal")
+    setSoldListModalOpen(false);
   };
 
   const handleStockListUpdate = () => {
@@ -220,7 +227,7 @@ const Stock: React.FC = () => {
   // function to take to sold stock modal
   // function to edit stock item
 
-  const fetchDataForEdit = async (productId: string) => {
+  const fetchDataForEdit = async (productId: string,  modalDestination: string) => {
     try {
       // Fetch the existing data for the product
       const response = await fetch(`http://localhost:3009/api/updateStock/${productId}`);
@@ -232,7 +239,14 @@ const Stock: React.FC = () => {
         // Set the selected product with the existing data
         setSelectedProduct(existingProductData);
         // Open the Edit modal
-        setEditBtnModalOpen(true);
+        if( modalDestination === 'edit'){
+          setEditBtnModalOpen(true);
+        }else if(modalDestination === 'sold'){
+          setSoldListModalOpen(true);
+        }else{
+          console.error('Invalid modalDestination', modalDestination)
+        }
+
       } else {
         // Handle error responses
         console.error(
@@ -248,7 +262,12 @@ const Stock: React.FC = () => {
   
   const handleEditBtn = (productId: string) => {
     // Call the function to fetch and populate the modal with existing data
-    fetchDataForEdit(productId);
+    fetchDataForEdit(productId, 'edit');
+  };
+
+  const handleSoldBtn = (productId: string) => {
+    // Call the function to fetch and populate the modal with existing data
+    fetchDataForEdit(productId, 'sold');
   };
 
   return (
@@ -329,7 +348,7 @@ const Stock: React.FC = () => {
                       <button className="icon-btn"  onClick={() => handleEditBtn(entry.stock_id)}>
                         <img className="edit-icon" src={Edit} alt="edit" />
                       </button>
-                      <button className="icon-btn">
+                      <button className="icon-btn"  onClick={() => handleSoldBtn(entry.stock_id)} >
                         {" "}
                         <img className="edit-icon" src={Sold} alt="sold" />
                       </button>
@@ -365,6 +384,12 @@ const Stock: React.FC = () => {
         < EditBtnModal
         isOpen={isEditBtnModalOpen}
         onClose={handleCloseBtnEditModal}
+        selectedProduct={selectedProduct}
+        updateStockList={handleStockListUpdate}
+        />
+        <SoldListModal
+        isOpen={isSoldListModalOpen}
+        onClose={handleCloseSoldListModal}
         selectedProduct={selectedProduct}
         updateStockList={handleStockListUpdate}
         />
