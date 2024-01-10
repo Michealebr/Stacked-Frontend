@@ -1,5 +1,6 @@
 import React from 'react'
 import AddSoldList from './AddSoldList';
+import  './SoldListModal.css'
 
 interface SoldListModalProps {
     isOpen: boolean;
@@ -32,7 +33,7 @@ type Product = {
 
   return (
      <div className={`modal modal1 ${isOpen ? 'open' : ''}`}>
-      <div className="modal-content mc1 edit-modal">
+      <div className="modal-content mc1 ">
       <AddSoldList onClose={onClose}  selectedProduct={selectedProduct} updateStockList={updateStockList} />
       </div>
     </div>
