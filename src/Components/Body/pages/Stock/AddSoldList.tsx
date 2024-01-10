@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import Cross from "src/assets/X.svg";
 import DropdownButton from "../../DropdownButton";
 
@@ -43,87 +43,128 @@ const AddSoldList: React.FC<SoldListModalProps> = ({
   onClose,
   selectedProduct,
   updateStockList,
+  handleDeleteStock,
 }) => {
   const currentDate = new Date().toISOString().split("T")[0];
 
   const [soldDate, SetSoldDate] = useState<string>(currentDate);
-  const [payout, SetPayout] = useState<Number>();
-  const [shippingFee, SetShippingFee] = useState<Number>(0);
-  const [otherFee, SetOtherFee] = useState<Number>();
-  // const [payout, SetPayout] = useState<Number>()
+  const [payout, SetPayout] = useState<number>();
+  const [shippingFee, SetShippingFee] = useState<number>(0);
+  const [otherFee, SetOtherFee] = useState<number>(0);
+  const [profit, setProfit] = useState<number>(0);
+  const [payoutAfterFee, setPayoutAfterFees] = useState<number>(0);
+  const [selectedPlatform, setSelectedPlatform] = useState('StockX');
 
-  const handleBlur = (
-    value: number | string,
-    setState: React.Dispatch<React.SetStateAction<number | string>>
-  ) => {
-    if (value === "") {
-      setState(0);
+  const handlePlatformSelect = (selectedValue) => {
+    setSelectedPlatform(selectedValue);
+  };
+//   const handleProfitCalc = () => {
+//     const totalCost = selectedProduct.total_cost;
+//     const payoutAfterFees = payout - (shippingFee + otherFee)
+//     const netProfit =   payoutAfterFees - totalCost
+// return netProfit
+//     console.log('Final Profit:', netProfit);
+//   }
+// useEffect(() => {
+//     // Function to perform the calculation
+//     const calculateProfit = () => {
+//       if (payout !== undefined && shippingFee !== undefined && otherFee !== undefined) {
+//         const totalCost = selectedProduct.total_cost;
+//         const payoutAfterFees = payout - (shippingFee + otherFee);
+//         const netProfit = payoutAfterFees - totalCost;
+
+//         // Update the profit state
+//         setProfit(netProfit);
+
+//         // Log for demonstration (you can remove this in production)
+//         console.log('Updated Profit:', netProfit);
+//       }
+//     };
+//   }, [payout, shippingFee, otherFee, selectedProduct.total_cost]);
+const calculateProfit = () => {
+    if (payout !== undefined && shippingFee !== undefined && otherFee !== undefined) {
+      const totalCost = selectedProduct.total_cost;
+      const payoutAfterFees = payout - (shippingFee + otherFee);
+      const netProfit = payoutAfterFees - totalCost;
+
+      // Update the profit state
+      setProfit(netProfit);
+      setPayoutAfterFees(payoutAfterFees)
+
+      // Log for demonstration (you can remove this in production)
+      console.log('Updated Profit:', netProfit);
     }
   };
+  const handleBlur = () => {
+    calculateProfit();
+  };
+
+//   const handleBlur = (
+//     value: number | string,
+//     setState: React.Dispatch<React.SetStateAction<number | string>>
+//   ) => {
+//     if (value === "") {
+//       setState(0);
+//     }
+//   };
 
   console.log(selectedProduct);
-  //   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //     event.preventDefault();
+    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-  //     try {
-  //       const totalcost = parseFloat(price) + parseFloat(shippingFee);
-  //       console.log(price);
-  //       console.log(shippingFee);
-  //       console.log(totalcost);
+      try {
 
-  //       const expectedProfit = expectedSalePrice - totalcost;
+        const updatedProduct = {
+          ...selectedProduct,
+          profit,
+          soldDate,
+          shippingFee,
+          otherFee,
+          payout,
+          total_payout: payoutAfterFee,
+          platform: selectedPlatform,
 
-  //       const updatedProduct = {
-  //         ...selectedProduct,
-  //         // sizes[0].label: selectedSizes,
-  //         // sizes[0].value: selectedSizes,
-  //         sizes: parseFloat(selectedSizes),
-  //         expected_sale_price: expectedSalePrice,
-  //         purchase_price: parseFloat(price),
-  //         expected_profit: expectedProfit,
-  //         shipping_cost: parseFloat(shippingFee),
-  //         total_cost: totalcost,
-  //         acquisition_date: acquisitionDate,
-  //       };
-  //       // Send the updated product data to the server
-  //       const response = await fetch(
-  //         `http://localhost:3009/api/updateStock/${selectedProduct.stock_id}`,
-  //         {
-  //           method: "PUT",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(updatedProduct),
-  //         }
-  //       );
+        };
+        // Send the updated product data to the server
+        const response = await fetch(
+          'http://localhost:3009/api/submitSale',
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedProduct),
+          }
+        );
 
-  //       if (response.ok) {
-  //         updateStockList();
-  //         // Optionally, handle success on the client side
-  //         console.log("Data updated successfully");
-  //         // Reset the form or close the modal
-  //         onClose();
-  //       } else {
-  //         const responseData = await response.json();
-  //         console.error(
-  //           "Error updating data:",
-  //           response.status,
-  //           response.statusText,
-  //           responseData.details
-  //         );
-  //         // Handle errors, show a message to the user, etc.
-  //       }
-  //     } catch (error) {
-  //       console.error("Error updating data:", error);
-  //       // Handle errors, show a message to the user, etc.
-  //     }
-  //   };
+        if (response.ok) {
+        //   updateStockList();
+          // Optionally, handle success on the client side
+          console.log("Data updated successfully");
+          handleDeleteStock(updatedProduct.stock_id)
+          // Reset the form or close the modal
+          onClose();
+        } else {
+          const responseData = await response.json();
+          console.error(
+            "Error updating data:",
+            response.status,
+            response.statusText,
+            responseData.details
+          );
+          // Handle errors, show a message to the user, etc.
+        }
+      } catch (error) {
+        console.error("Error updating data:", error);
+        // Handle errors, show a message to the user, etc.
+      }
+    };
 
   // onSubmit={handleFormSubmit}
 
   return (
     <div className="modal-container">
-      <form>
+      <form onSubmit={handleFormSubmit}>
         <button className="close-btn" onClick={onClose}>
           <img className="modal-cross" src={Cross} />
         </button>
@@ -178,11 +219,11 @@ const AddSoldList: React.FC<SoldListModalProps> = ({
             </label>
             <input
               name="SaleDate"
-              className="input-info-ps "
+              className="input-info-ps profit-inp"
               type="number"
               value={payout}
-              onChange={(e) => SetPayout(Number(e.target.value))}
-              onBlur={() => handleBlur(payout, setPayout)}
+              onChange={(e) => SetPayout(e.target.value)}
+              onBlur={handleBlur}
               required
             />
           </div>
@@ -193,11 +234,12 @@ const AddSoldList: React.FC<SoldListModalProps> = ({
             </label>
             <input
               name="ShippingFee"
-              className="input-info-ps "
+              className="input-info-ps profit-inp"
               type="number"
               value={shippingFee}
+              onBlur={handleBlur}
               onChange={(e) => SetShippingFee(Number(e.target.value))}
-              onBlur={() => handleBlur(shippingFee, SetShippingFee)}
+              
             />
           </div>
           {/* fees */}
@@ -207,11 +249,11 @@ const AddSoldList: React.FC<SoldListModalProps> = ({
             </label>
             <input
               name="Fee"
-              className="input-info-ps "
+              className="input-info-ps profit-inp"
               type="number"
               value={otherFee}
+              onBlur={handleBlur}
               onChange={(e) => SetOtherFee(Number(e.target.value))}
-              onBlur={() => handleBlur(otherFee, SetOtherFee)}
             />
           </div>
           {/* sold date  */}
@@ -256,12 +298,28 @@ const AddSoldList: React.FC<SoldListModalProps> = ({
               btnContainerWidth="platform-btn-ctn-width"
               dropdownWidth="drop-platform-btn-width"
               svg={null}
+              onSelect={handlePlatformSelect}
             />
           </div>
+        </div>
+        <div className="price-info-container edit-info-container">
           {/* show profit / loss  */}
+          <div className="input-price-info">
+            <label className="price-input-label" htmlFor="Profit">
+              Profit / Loss
+            </label>
+            <input
+              name="Profit"
+              className="input-info-ps show-profit"
+              type="number"
+              disabled
+                value={profit|| 0}
+            //   onChange={(e) => SetProfit(Number(e.target.value))}
+            />
+          </div>
         </div>
 
-        <button className="submit-form-btn" type="submit">
+        <button className="submit-form-btn sold-btn-modal" type="submit">
           Sold
         </button>
       </form>

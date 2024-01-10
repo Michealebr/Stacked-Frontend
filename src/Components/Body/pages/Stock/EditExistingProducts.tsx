@@ -70,8 +70,6 @@ const handleBlur = (value: number | string, setState: React.Dispatch<React.SetSt
     
       const updatedProduct = {
         ...selectedProduct,
-        // sizes[0].label: selectedSizes,
-        // sizes[0].value: selectedSizes,
         sizes: parseFloat(selectedSizes),
         expected_sale_price: expectedSalePrice,
         purchase_price: parseFloat(price),

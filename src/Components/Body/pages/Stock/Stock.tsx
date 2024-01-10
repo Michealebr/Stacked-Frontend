@@ -392,6 +392,7 @@ const Stock: React.FC = () => {
         onClose={handleCloseSoldListModal}
         selectedProduct={selectedProduct}
         updateStockList={handleStockListUpdate}
+        handleDeleteStock = {handleDeleteClick}
         />
       </div>
     </>

@@ -26,7 +26,7 @@ type Product = {
   }
 
 
-  const SoldListModal: React.FC<SoldListModalProps> = ({ isOpen, onClose, selectedProduct, updateStockList}) => {
+  const SoldListModal: React.FC<SoldListModalProps> = ({ isOpen, onClose, selectedProduct, updateStockList, handleDeleteStock}) => {
     if (!isOpen) {
         return null;
       }
@@ -34,7 +34,7 @@ type Product = {
   return (
      <div className={`modal modal1 ${isOpen ? 'open' : ''}`}>
       <div className="modal-content mc1 ">
-      <AddSoldList onClose={onClose}  selectedProduct={selectedProduct} updateStockList={updateStockList} />
+      <AddSoldList onClose={onClose}  selectedProduct={selectedProduct} updateStockList={updateStockList} handleDeleteStock={handleDeleteStock} />
       </div>
     </div>
   )

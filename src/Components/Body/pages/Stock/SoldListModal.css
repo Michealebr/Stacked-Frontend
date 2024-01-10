@@ -20,5 +20,12 @@
 
 .prev-data{
     /* color: #F4F4F4; */
-    
+
+}
+.show-profit{
+ background-color: transparent;
+ color: black;
+}
+.sold-btn-modal{
+    margin-top: 70px;
 }
