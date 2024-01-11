@@ -55,7 +55,12 @@ const AddSoldList: React.FC<SoldListModalProps> = ({
   const [payoutAfterFee, setPayoutAfterFees] = useState<number>(0);
   const [selectedPlatform, setSelectedPlatform] = useState('StockX');
 
-  const handlePlatformSelect = (selectedValue) => {
+  useEffect(() => {
+    // This effect will be triggered whenever selectedPlatform changes
+    console.log("Selected Platform:", selectedPlatform);
+  }, [selectedPlatform]);
+
+  const handlePlatformSelect = (selectedValue: string) => {
     setSelectedPlatform(selectedValue);
   };
 //   const handleProfitCalc = () => {

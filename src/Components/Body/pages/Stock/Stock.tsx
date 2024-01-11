@@ -132,26 +132,6 @@ const Stock: React.FC = () => {
       // Handle errors, show a message to the user, etc.
     }
   };
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:3009/api/stocklist");
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       setStockEntries(data);
-  //       console.log(data)
-        
-  //     } else {
-  //       console.error(
-  //         "Error fetching data:",
-  //         response.status,
-  //         response.statusText
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3009/api/stocklist");
@@ -184,7 +164,7 @@ const Stock: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchTrigger]); // The empty dependency array ensures this effect runs only once when the component mounts
+  }, [fetchTrigger]);
 
   // function to delete stocklist item
 

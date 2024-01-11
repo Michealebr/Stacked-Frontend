@@ -13,22 +13,40 @@ interface DropdownButtonProps {
   dropdownWidth: string
   btnContainerWidth: string
   arrowSize:string
+  onSelect?: (selectedValue: string) => void;
 }
 
 
-const DropdownButton: React.FC<DropdownButtonProps> = ({ intervals , svg, btnContainerWidth, buttonWidth, dropdownWidth , arrowSize}) => {
+const DropdownButton: React.FC<DropdownButtonProps> = ({ intervals , svg, btnContainerWidth, buttonWidth, dropdownWidth , arrowSize, onSelect}) => {
   const [isClicked, setClick] = useState(false)
   const handleCLick = () => {
     setClick(!isClicked)
   }
   
   const [selectedInterval, setSelectedInterval] = useState<Interval>(intervals[0]);
-
+  // const [selectedValue, setSelectedValue] = useState<string | null>(null);
  
- const handleIntervalClick = (interval: Interval) => {
-   setSelectedInterval(interval)
-   setClick(!isClicked)
- }
+//  const handleIntervalClick = (interval: Interval) => {
+//    setSelectedInterval(interval)
+//    console.log(selectedInterval)
+//    setClick(!isClicked)
+//  }
+const handleIntervalClick = (interval: { value: string; label: string }) => {
+  setSelectedInterval(interval);
+  setClick(false);
+
+  if (onSelect) {
+    onSelect(interval.value);
+  }
+};
+
+//  const handleSelect = (value: string) => {
+//     setSelectedValue(value);
+
+//     if (onSelect) {
+//       onSelect(value);
+//     }
+//   };
 
   return (
     <div className={`dropdown ${btnContainerWidth}`}>
@@ -48,10 +66,11 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ intervals , svg, btnCon
         {intervals.map((interval) => (
             <div
               key={interval.value}
-              // onClick={() => handleIntervalClick(interval)}
+
               onClick={(e) => {
                 e.preventDefault()
-                handleIntervalClick(interval)}}
+                handleIntervalClick(interval)
+              }}
 
               className={selectedInterval.value === interval.value ? 'selected' : ''}
             >
