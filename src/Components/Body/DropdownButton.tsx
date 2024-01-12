@@ -17,13 +17,15 @@ interface DropdownButtonProps {
 }
 
 
-const DropdownButton: React.FC<DropdownButtonProps> = ({ intervals , svg, btnContainerWidth, buttonWidth, dropdownWidth , arrowSize, onSelect}) => {
+const DropdownButton: React.FC<DropdownButtonProps> = ({ intervals , svg, btnContainerWidth, buttonWidth, dropdownWidth , arrowSize, onSelect, selectedValue}) => {
   const [isClicked, setClick] = useState(false)
   const handleCLick = () => {
     setClick(!isClicked)
   }
-  
+ 
   const [selectedInterval, setSelectedInterval] = useState<Interval>(intervals[0]);
+
+  
   // const [selectedValue, setSelectedValue] = useState<string | null>(null);
  
 //  const handleIntervalClick = (interval: Interval) => {
@@ -40,13 +42,7 @@ const handleIntervalClick = (interval: { value: string; label: string }) => {
   }
 };
 
-//  const handleSelect = (value: string) => {
-//     setSelectedValue(value);
 
-//     if (onSelect) {
-//       onSelect(value);
-//     }
-//   };
 
   return (
     <div className={`dropdown ${btnContainerWidth}`}>
@@ -56,7 +52,9 @@ const handleIntervalClick = (interval: { value: string; label: string }) => {
                 e.preventDefault()
                 handleCLick()}}
         >
-                  {selectedInterval.label}
+                  {/* {selectedInterval.label || selectedValue} */}
+                  {/* {selectedValue !== undefined ? selectedValue : selectedInterval.label} */}
+                  {selectedValue ? selectedValue : selectedInterval.label}
         <img className='cal-icon' src={svg}/>
         <img className={`arrow-icon ${arrowSize}`} src={Arrow}/>
         </button>
@@ -74,7 +72,7 @@ const handleIntervalClick = (interval: { value: string; label: string }) => {
 
               className={selectedInterval.value === interval.value ? 'selected' : ''}
             >
-              {interval.label}
+              {interval.label || selectedValue}
             </div>
           ))}
         </div>

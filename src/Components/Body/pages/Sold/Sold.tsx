@@ -6,6 +6,7 @@ import Edit from "src/assets/Edit.svg";
 import Cross from "src/assets/X.svg";
 
 import DropDownBtn from '@/Components/UsefulComponents/DropDownBtn'
+import EditSoldModal from '../Sold/EditSoldModal';
 
 
 
@@ -32,11 +33,50 @@ const Sold: React.FC = () => {
 
 const [soldListEntries, setSoldListEntries] = useState<SoldEntry[]>([])
 const [fetchTrigger, setFetchTrigger] = useState(0);
+const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+const [isSoldEditBtnModalOpen, setSoldEditBtnModalOpen] = useState(false);
 
-const handleStockListUpdate = () => {
+// updates soldlist ui
+const handleSoldListUpdate = () => {
   setFetchTrigger((prev) => prev + 1);
 }
+// deletes sold list entry
+const handleDeleteClick = async (productId: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3009/api/deleteSold/${productId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    console.log(productId);
 
+    if (response.ok) {
+      console.log("Sold Product deleted successfully");
+      // Fetch updated data or update the UI accordingly
+      setSoldListEntries((prevStockEntries) =>
+        prevStockEntries.filter((entry) => entry.productId !== productId)
+      );
+      // setFetchTrigger((prev) => prev + 1);
+      handleStockListUpdate()
+    } else {
+      const responseData = await response.json();
+      console.error(
+        "Error deleting product:",
+        response.status,
+        response.statusText,
+        responseData.error
+      );
+      // Handle errors, show a message to the user, etc.
+    }
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    // Handle errors, show a message to the user, etc.
+  }
+};
+
+
+//gets the sold list data
   const fetchData  = async () => {
     try{
       const response = await fetch("http://localhost:3009/api/soldlist");
@@ -64,9 +104,47 @@ const handleStockListUpdate = () => {
     }
   };
 
+  const fetchSoldDataForEdit = async (productId: string) => {
+    try {
+      // Fetch the existing data for the product
+      const response = await fetch(`http://localhost:3009/api/updateSoldEntry/${productId}`);
+  
+      if (response.ok) {
+        // Parse the response to get the existing product data
+        const existingProductData = await response.json();
+  
+        // Set the selected product with the existing data
+        setSelectedProduct(existingProductData);
+        // Open the Edit modal
+      
+          setSoldEditBtnModalOpen(true);
+
+      } else {
+        // Handle error responses
+        console.error(
+          "Error fetching data:",
+          response.status,
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
   useEffect(() => {
     fetchData();
   }, [fetchTrigger]);
+
+  const handleCloseBtnModal = () => {
+    console.log("closing modal")
+    setSoldEditBtnModalOpen(false);
+  };
+  const handleEditBtn = (productId: string) => {
+    // Call the function to fetch and populate the modal with existing data
+    fetchSoldDataForEdit(productId);
+  };
 
 
   return (
@@ -142,7 +220,7 @@ const handleStockListUpdate = () => {
                   <td>
                     {/* <div className="icon-container"> */}
                       <button className="icon-btn"  
-                      // onClick={() => handleEditBtn(entry.stock_id)}
+                      onClick={() => handleEditBtn(entry.sold_id)}
                       >
                         <img className="edit-icon" src={Edit} alt="edit" />
                       </button>
@@ -150,7 +228,7 @@ const handleStockListUpdate = () => {
                         className="icon-btn"
                         onClick={() => {
                           console.log(entry); // Log the entire entry object
-                          // handleDeleteClick(entry.stock_id);
+                          handleDeleteClick(entry.sold_id);
                         }}
                       >
                         {" "}
@@ -164,7 +242,7 @@ const handleStockListUpdate = () => {
           </table>
           {/* all this needs to be looped  */}
         </div>
-
+<EditSoldModal isOpen={isSoldEditBtnModalOpen} onClose={handleCloseBtnModal} selectedProduct={selectedProduct} updateStockList={handleSoldListUpdate}/>
       </div>
     </>
   )
