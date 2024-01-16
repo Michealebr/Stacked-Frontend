@@ -41,6 +41,7 @@
 }
 .btn-container{
     display: flex;
+    z-index: 2;
 }
 .btn{
     display: flex;

@@ -12,8 +12,7 @@ import EditSoldModal from '../Sold/EditSoldModal';
 
 const Sold: React.FC = () => {
   const productStockFilter = [
-    { value: 'Size', label: 'Size' },
-    { value: 'Newest', label: 'Newest' },
+    { value: 'Recent', label: 'Recent' },
     { value: 'Oldest', label: 'Oldest' },
   ];
   interface SoldEntry {
@@ -35,6 +34,8 @@ const [soldListEntries, setSoldListEntries] = useState<SoldEntry[]>([])
 const [fetchTrigger, setFetchTrigger] = useState(0);
 const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 const [isSoldEditBtnModalOpen, setSoldEditBtnModalOpen] = useState(false);
+
+const [sortOrder, setSortOrder] = useState('Recent');
 
 // updates soldlist ui
 const handleSoldListUpdate = () => {
@@ -58,7 +59,7 @@ const handleDeleteClick = async (productId: string) => {
         prevStockEntries.filter((entry) => entry.productId !== productId)
       );
       // setFetchTrigger((prev) => prev + 1);
-      handleStockListUpdate()
+      handleSoldListUpdate()
     } else {
       const responseData = await response.json();
       console.error(
@@ -89,9 +90,14 @@ const handleDeleteClick = async (productId: string) => {
           total_payout: Number(entry.total_payout).toLocaleString(),
           purchase_price: Number(entry.purchase_price).toLocaleString()
         }))
+         const sortedData = sortOrder === 'Recent'
+          ? formattedData.slice().sort((a, b) => new Date(b.sold_date) - new Date(a.sold_date))
+          : formattedData.slice().sort((a, b) => new Date(a.sold_date) - new Date(b.sold_date));
 
-        setSoldListEntries(formattedData)
-        console.log(formattedData)
+        setSoldListEntries(sortedData);
+
+        // setSoldListEntries(formattedData)
+        // console.log(formattedData)
       }else {
         console.error(
           "Error fetching data:",
@@ -135,7 +141,7 @@ const handleDeleteClick = async (productId: string) => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchTrigger]);
+  }, [sortOrder, fetchTrigger]);
 
   const handleCloseBtnModal = () => {
     console.log("closing modal")
@@ -145,7 +151,42 @@ const handleDeleteClick = async (productId: string) => {
     // Call the function to fetch and populate the modal with existing data
     fetchSoldDataForEdit(productId);
   };
+  function formatDate(dateString: string): string {
+    const [year, month, day] = dateString.split('T')[0].split('-');
+    return `${day}/${month}/${year}`;
+  }   
 
+
+  const handleSortChange = async (selectedOption) => {
+    try {
+      const response = await fetch(`http://localhost:3009/api/soldlist?sortOrder=${selectedOption.value}`);
+      if (response.ok) {
+        const data = await response.json();
+
+        const formattedData = data.map(entry => ({
+          ...entry,
+          profit: Number(entry.profit).toLocaleString(),
+          total_payout: Number(entry.total_payout).toLocaleString(),
+          purchase_price: Number(entry.purchase_price).toLocaleString()
+        }));
+
+        const sortedData = selectedOption.value === 'Recent'
+          ? formattedData.slice().sort((a, b) => new Date(b.sold_date) - new Date(a.sold_date))
+          : formattedData.slice().sort((a, b) => new Date(a.sold_date) - new Date(b.sold_date));
+
+        setSoldListEntries(sortedData);
+        setSortOrder(selectedOption.value);
+      } else {
+        console.error(
+          "Error fetching data:",
+          response.status,
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   return (
     <>
@@ -164,6 +205,7 @@ const handleDeleteClick = async (productId: string) => {
               textContent={true}
               rightIcon={false}
               dropDownDesign={"stock-filter"}
+              onClick={handleSortChange}
             />
           </div>
         </div>
@@ -215,7 +257,7 @@ const handleDeleteClick = async (productId: string) => {
 
                   {/* </div> */}
                   <td className="stock-text date-box">
-                    {entry.acquisition_date.split("T")[0]}
+                  {entry.sold_date ? formatDate(entry.sold_date) : ''}
                   </td>
                   <td>
                     {/* <div className="icon-container"> */}

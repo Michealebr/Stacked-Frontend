@@ -36,9 +36,9 @@ const Stock: React.FC = () => {
   const [stockEntries, setStockEntries] = useState<StockEntry[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [fetchTrigger, setFetchTrigger] = useState(0);
+  const [sortOrder, setSortOrder] = useState('Recent');
 
   const productStockFilter = [
-    { value: "Size", label: "Size" },
     { value: "Newest", label: "Newest" },
     { value: "Oldest", label: "Oldest" },
   ];
@@ -148,8 +148,14 @@ const Stock: React.FC = () => {
           // Add more fields as needed
         }));
   
-        setStockEntries(formattedData);
-        console.log(formattedData);
+ const sortedData = sortOrder === 'Recent'
+          ? formattedData.slice().sort((a, b) => new Date(b.acquisition_date) - new Date(a.acquisition_date))
+          : formattedData.slice().sort((a, b) => new Date(a.acquisition_date) - new Date(b.acquisition_date));
+
+          setStockEntries(sortedData);
+
+        // setStockEntries(formattedData);
+        // console.log(formattedData);
       } else {
         console.error(
           "Error fetching data:",
@@ -164,7 +170,7 @@ const Stock: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchTrigger]);
+  }, [sortOrder, fetchTrigger]);
 
   // function to delete stocklist item
 
@@ -250,6 +256,42 @@ const Stock: React.FC = () => {
     fetchDataForEdit(productId, 'sold');
   };
 
+  function formatDate(dateString: string): string {
+    const [year, month, day] = dateString.split('T')[0].split('-');
+    return `${day}/${month}/${year}`;
+  }
+
+  const handleSortChange = async (selectedOption) => {
+    try {
+      const response = await fetch(`http://localhost:3009/api/stocklist?sortOrder=${selectedOption.value}`);
+      if (response.ok) {
+        const data = await response.json();
+
+        const formattedData = data.map(entry => ({
+          ...entry,
+          total_cost: Number(entry.total_cost).toLocaleString(),
+          expected_sale_price: Number(entry.expected_sale_price).toLocaleString(),
+          expected_profit: Number(entry.expected_profit).toLocaleString()
+        }));
+
+        const sortedData = selectedOption.value === 'Recent'
+          ? formattedData.slice().sort((a, b) => new Date(b.acquisition_date) - new Date(a.acquisition_date))
+          : formattedData.slice().sort((a, b) => new Date(a.acquisition_date) - new Date(b.acquisition_date));
+
+          setStockEntries(sortedData);
+        setSortOrder(selectedOption.value);
+      } else {
+        console.error(
+          "Error fetching data:",
+          response.status,
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <>
       <div className="page page-layout">
@@ -273,6 +315,7 @@ const Stock: React.FC = () => {
               textContent={true}
               rightIcon={false}
               dropDownDesign={"stock-filter"}
+              onClick={handleSortChange}
             />
           </div>
         </div>
@@ -321,7 +364,7 @@ const Stock: React.FC = () => {
                     <td className="stock-text">{entry.expected_profit}</td>
                   {/* </div> */}
                   <td className="stock-text date-box">
-                    {entry.acquisition_date.split("T")[0]}
+                    {formatDate(entry.acquisition_date)}
                   </td>
                   <td>
                     {/* <div className="icon-container"> */}

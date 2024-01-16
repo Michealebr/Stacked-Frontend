@@ -26,13 +26,6 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({ intervals , svg, btnCon
   const [selectedInterval, setSelectedInterval] = useState<Interval>(intervals[0]);
 
   
-  // const [selectedValue, setSelectedValue] = useState<string | null>(null);
- 
-//  const handleIntervalClick = (interval: Interval) => {
-//    setSelectedInterval(interval)
-//    console.log(selectedInterval)
-//    setClick(!isClicked)
-//  }
 const handleIntervalClick = (interval: { value: string; label: string }) => {
   setSelectedInterval(interval);
   setClick(false);
@@ -52,8 +45,6 @@ const handleIntervalClick = (interval: { value: string; label: string }) => {
                 e.preventDefault()
                 handleCLick()}}
         >
-                  {/* {selectedInterval.label || selectedValue} */}
-                  {/* {selectedValue !== undefined ? selectedValue : selectedInterval.label} */}
                   {selectedValue ? selectedValue : selectedInterval.label}
         <img className='cal-icon' src={svg}/>
         <img className={`arrow-icon ${arrowSize}`} src={Arrow}/>

@@ -18,7 +18,7 @@ import Arrow from "src/assets/Arrow.svg"
       }
       
       
-      const DropDownBtn: React.FC<DropdownButtonProps> = ({ option, svg, content, textContent, leftIcon, rightIcon , dropDownDesign}) => {
+      const DropDownBtn: React.FC<DropdownButtonProps> = ({ option, svg, content, textContent, leftIcon, rightIcon , dropDownDesign, onClick}) => {
         const [isClicked, setClick] = useState(false)
         const handleCLick = () => {
           setClick(!isClicked)
@@ -27,10 +27,15 @@ import Arrow from "src/assets/Arrow.svg"
         const [selectedFilter, setSelectedFilter] = useState<Options>(option[0]);
       
        
-       const handleIntervalClick = (selectedOption : Options) => {
-         setSelectedFilter(selectedOption)
-         setClick(!isClicked)
-       }
+      //  const handleIntervalClick = (selectedOption : Options) => {
+      //    setSelectedFilter(selectedOption)
+      //    setClick(!isClicked)
+      //  }
+      const handleOptionClick = (selectedOption: Options) => {
+        setSelectedFilter(selectedOption);
+        setClick(!isClicked);
+        onClick(selectedOption); // Pass the selected option to the parent component
+      }
       
         return (
           <div className="drop-dw">
@@ -52,7 +57,7 @@ import Arrow from "src/assets/Arrow.svg"
               {option.map((selectedOption) => (
                   <div
                     key={selectedOption.value}
-                    onClick={() => handleIntervalClick(selectedOption)}
+                    onClick={() => handleOptionClick(selectedOption)}
                     className={selectedFilter.value === selectedOption.value ? 'selected' : ''}
                   >
                     {selectedOption.label}

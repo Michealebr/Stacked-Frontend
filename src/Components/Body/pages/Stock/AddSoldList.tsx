@@ -63,29 +63,7 @@ const AddSoldList: React.FC<SoldListModalProps> = ({
   const handlePlatformSelect = (selectedValue: string) => {
     setSelectedPlatform(selectedValue);
   };
-//   const handleProfitCalc = () => {
-//     const totalCost = selectedProduct.total_cost;
-//     const payoutAfterFees = payout - (shippingFee + otherFee)
-//     const netProfit =   payoutAfterFees - totalCost
-// return netProfit
-//     console.log('Final Profit:', netProfit);
-//   }
-// useEffect(() => {
-//     // Function to perform the calculation
-//     const calculateProfit = () => {
-//       if (payout !== undefined && shippingFee !== undefined && otherFee !== undefined) {
-//         const totalCost = selectedProduct.total_cost;
-//         const payoutAfterFees = payout - (shippingFee + otherFee);
-//         const netProfit = payoutAfterFees - totalCost;
 
-//         // Update the profit state
-//         setProfit(netProfit);
-
-//         // Log for demonstration (you can remove this in production)
-//         console.log('Updated Profit:', netProfit);
-//       }
-//     };
-//   }, [payout, shippingFee, otherFee, selectedProduct.total_cost]);
 const calculateProfit = () => {
     if (payout !== undefined && shippingFee !== undefined && otherFee !== undefined) {
       const totalCost = selectedProduct.total_cost;
