@@ -51,7 +51,7 @@ const EditSoldEntry: React.FC<SoldListModalProps> = ({
     const [otherFee, setNewOtherFee] = useState<number>(selectedProduct.other_fee);
     const [shippingFee, setNewShippingFee] = useState<number>(selectedProduct.shipping_fee );
     const [payout, setNewPayout] = useState<number>(selectedProduct.sale_price);
-    const [profit, setNewProfit] = useState(selectedProduct.sale_price);
+    const [profit, setNewProfit] = useState(selectedProduct.profit);
     const [payoutAfterFees, setNewPayoutAfterFees] = useState(selectedProduct.sale_price);
     const [soldDate , setNewSoldDate] = useState(selectedProduct.sold_date)
    

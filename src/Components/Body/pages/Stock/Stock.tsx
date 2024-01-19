@@ -36,18 +36,18 @@ const Stock: React.FC = () => {
   const [stockEntries, setStockEntries] = useState<StockEntry[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [fetchTrigger, setFetchTrigger] = useState(0);
-  const [sortOrder, setSortOrder] = useState('Recent');
+  const [sortOrder, setSortOrder] = useState("Recent");
+  const [searchTerm, setSearchTerm] = useState("");
+  
 
   const productStockFilter = [
-    { value: "Newest", label: "Newest" },
+    { value: "Recent", label: "Recent" },
     { value: "Oldest", label: "Oldest" },
   ];
 
   const handleAddClick = () => {
     setAddModalOpen(true);
   };
-
-  
 
   const handleEditClick = (product: Product) => {
     setSelectedProduct(product);
@@ -59,23 +59,22 @@ const Stock: React.FC = () => {
   };
 
   const handleCloseEditModal = () => {
-  
     setEditModalOpen(false);
   };
 
   const handleCloseBtnEditModal = () => {
-    console.log("closing modal")
+    console.log("closing modal");
     setEditBtnModalOpen(false);
   };
 
   const handleCloseSoldListModal = () => {
-    console.log("closing modal")
+    console.log("closing modal");
     setSoldListModalOpen(false);
   };
 
   const handleStockListUpdate = () => {
     setFetchTrigger((prev) => prev + 1);
-  }
+  };
 
   const handleFormSubmit = async (formData: StockEntry) => {
     try {
@@ -114,7 +113,7 @@ const Stock: React.FC = () => {
             console.log("Data submitted successfully");
             // Reset the form or perform any other necessary actions
             // setFetchTrigger((prev) => prev + 1);
-            handleStockListUpdate()
+            handleStockListUpdate();
           } else {
             const responseData = await response.json();
             console.error(
@@ -137,22 +136,26 @@ const Stock: React.FC = () => {
       const response = await fetch("http://localhost:3009/api/stocklist");
       if (response.ok) {
         const data = await response.json();
-  
+
         // Convert numeric fields to numbers
-        const formattedData = data.map(entry => ({
+        const formattedData = data.map((entry) => ({
           ...entry,
           total_cost: Number(entry.total_cost).toLocaleString(),
-          expected_sale_price: Number(entry.expected_sale_price).toLocaleString(),
-          expected_profit: Number(entry.expected_profit).toLocaleString()
-          
+          expected_sale_price: Number(
+            entry.expected_sale_price
+          ).toLocaleString(),
+          expected_profit: Number(entry.expected_profit).toLocaleString(),
+
           // Add more fields as needed
         }));
-  
- const sortedData = sortOrder === 'Recent'
-          ? formattedData.slice().sort((a, b) => new Date(b.acquisition_date) - new Date(a.acquisition_date))
-          : formattedData.slice().sort((a, b) => new Date(a.acquisition_date) - new Date(b.acquisition_date));
 
-          setStockEntries(sortedData);
+        const sortedData = formattedData.slice().sort((a, b) => {
+          const dateA = new Date(a.acquisition_date);
+          const dateB = new Date(b.acquisition_date);
+
+          return sortOrder === "Recent" ? dateB - dateA : dateA - dateB;
+        });
+        setStockEntries(sortedData);
 
         // setStockEntries(formattedData);
         // console.log(formattedData);
@@ -193,7 +196,7 @@ const Stock: React.FC = () => {
           prevStockEntries.filter((entry) => entry.productId !== productId)
         );
         // setFetchTrigger((prev) => prev + 1);
-        handleStockListUpdate()
+        handleStockListUpdate();
       } else {
         const responseData = await response.json();
         console.error(
@@ -213,26 +216,30 @@ const Stock: React.FC = () => {
   // function to take to sold stock modal
   // function to edit stock item
 
-  const fetchDataForEdit = async (productId: string,  modalDestination: string) => {
+  const fetchDataForEdit = async (
+    productId: string,
+    modalDestination: string
+  ) => {
     try {
       // Fetch the existing data for the product
-      const response = await fetch(`http://localhost:3009/api/updateStock/${productId}`);
-  
+      const response = await fetch(
+        `http://localhost:3009/api/updateStock/${productId}`
+      );
+
       if (response.ok) {
         // Parse the response to get the existing product data
         const existingProductData = await response.json();
-  
+
         // Set the selected product with the existing data
         setSelectedProduct(existingProductData);
         // Open the Edit modal
-        if( modalDestination === 'edit'){
+        if (modalDestination === "edit") {
           setEditBtnModalOpen(true);
-        }else if(modalDestination === 'sold'){
+        } else if (modalDestination === "sold") {
           setSoldListModalOpen(true);
-        }else{
-          console.error('Invalid modalDestination', modalDestination)
+        } else {
+          console.error("Invalid modalDestination", modalDestination);
         }
-
       } else {
         // Handle error responses
         console.error(
@@ -245,40 +252,41 @@ const Stock: React.FC = () => {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   const handleEditBtn = (productId: string) => {
     // Call the function to fetch and populate the modal with existing data
-    fetchDataForEdit(productId, 'edit');
+    fetchDataForEdit(productId, "edit");
   };
 
   const handleSoldBtn = (productId: string) => {
     // Call the function to fetch and populate the modal with existing data
-    fetchDataForEdit(productId, 'sold');
+    fetchDataForEdit(productId, "sold");
   };
 
   function formatDate(dateString: string): string {
-    const [year, month, day] = dateString.split('T')[0].split('-');
+    const [year, month, day] = dateString.split("T")[0].split("-");
     return `${day}/${month}/${year}`;
   }
 
   const handleSortChange = async (selectedOption) => {
     try {
-      const response = await fetch(`http://localhost:3009/api/stocklist?sortOrder=${selectedOption.value}`);
+      const response = await fetch(
+        `http://localhost:3009/api/stocklist?sortOrder=${selectedOption.value}`
+      );
+
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
+        const sortedData = data.slice().sort((a, b) => {
+          const dateA = new Date(a.acquisition_date);
+          const dateB = new Date(b.acquisition_date);
 
-        const formattedData = data.map(entry => ({
-          ...entry,
-          total_cost: Number(entry.total_cost).toLocaleString(),
-          expected_sale_price: Number(entry.expected_sale_price).toLocaleString(),
-          expected_profit: Number(entry.expected_profit).toLocaleString()
-        }));
+          return selectedOption.value === "Recent"
+            ? dateB - dateA
+            : dateA - dateB;
+        });
 
-        const sortedData = selectedOption.value === 'Recent'
-          ? formattedData.slice().sort((a, b) => new Date(b.acquisition_date) - new Date(a.acquisition_date))
-          : formattedData.slice().sort((a, b) => new Date(a.acquisition_date) - new Date(b.acquisition_date));
-
-          setStockEntries(sortedData);
+        setStockEntries(sortedData);
         setSortOrder(selectedOption.value);
       } else {
         console.error(
@@ -292,13 +300,29 @@ const Stock: React.FC = () => {
     }
   };
 
+  // searchbar functionality
+
+  const filteredStockEntries = stockEntries.filter(
+    (entry) =>
+      entry.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      entry.product_sku.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       <div className="page page-layout">
         <div className="page-header">
           <div className="search-box">
             <img className="search-icon" src={SearchIcon} alt="search icon" />
-            <input className="searchbar" type="text"></input>
+            <input
+            className="searchbar" 
+            type="text"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              console.log("Search Term:", e.target.value);
+            }}
+            />
           </div>
           <div className="btn-container">
             <button className=" btn add-stock" onClick={handleAddClick}>
@@ -325,66 +349,86 @@ const Stock: React.FC = () => {
             <thead>
               <tr>
                 <th className="th-title" id="img"></th>
-                <th className="th-title" id="name-sku">Name & Sku</th>
-                <th className="th-title" id="size">Size</th>
-                <th className="th-title" id="purchase-price">Cost</th>
-                <th className="th-title" id="expected-sale-price">TSP</th>
-                <th className="th-title" id="expected-profit">Projected P/L</th>
-                <th className="th-title" id="purchase-date">Purchase Date</th>
+                <th className="th-title" id="name-sku">
+                  Name & Sku
+                </th>
+                <th className="th-title" id="size">
+                  Size
+                </th>
+                <th className="th-title" id="purchase-price">
+                  Cost
+                </th>
+                <th className="th-title" id="expected-sale-price">
+                  TSP
+                </th>
+                <th className="th-title" id="expected-profit">
+                  Projected P/L
+                </th>
+                <th className="th-title" id="purchase-date">
+                  Purchase Date
+                </th>
                 <th className="th-title" id="Product-btn"></th>
               </tr>
             </thead>
             <tbody>
-              {stockEntries.map((entry, index) => (
-                
+              {(searchTerm.length > 0 ? filteredStockEntries : stockEntries).map(
+    (entry, index) =>(
                 <tr key={index} className="product-line">
                   {/* <div className="info-container"> */}
-                    <td>
-                      <img
-                        className="product-img"
-                        src={entry.img_url}
-                        alt="product img"
-                      />
-                    </td>
-                    <td className="product-name">
-                      {entry.product_name}
-                      <p className="product-sku">{entry.product_sku}</p>
-                    </td>
+                  <td>
+                    <img
+                      className="product-img"
+                      src={entry.img_url}
+                      alt="product img"
+                    />
+                  </td>
+                  <td className="product-name">
+                    {entry.product_name}
+                    <p className="product-sku">{entry.product_sku}</p>
+                  </td>
 
-                    <td className="stock-text" id="size">
-                      {" "}
-                      {entry.sizes &&
-                        entry.sizes.length > 0 &&
-                        `UK ${entry.sizes[0].value}`}
-                    </td>
+                  <td className="stock-text" id="size">
+                    {" "}
+                    {entry.sizes &&
+                      entry.sizes.length > 0 &&
+                      `UK ${entry.sizes[0].value}`}
+                  </td>
                   {/* </div> */}
                   {/* <div className="product-price-container"> */}
-                    <td className="stock-text total-cost-box">${entry.total_cost}</td>
-                    <td className="stock-text">${entry.expected_sale_price}</td>
-                    <td className="stock-text">{entry.expected_profit}</td>
+                  <td className="stock-text total-cost-box">
+                    ${entry.total_cost}
+                  </td>
+                  <td className="stock-text">${entry.expected_sale_price}</td>
+                  <td className="stock-text">{entry.expected_profit}</td>
                   {/* </div> */}
                   <td className="stock-text date-box">
                     {formatDate(entry.acquisition_date)}
                   </td>
                   <td>
                     {/* <div className="icon-container"> */}
-                      <button className="icon-btn"  onClick={() => handleEditBtn(entry.stock_id)}>
-                        <img className="edit-icon" src={Edit} alt="edit" />
-                      </button>
-                      <button className="icon-btn"  onClick={() => handleSoldBtn(entry.stock_id)} >
-                        {" "}
-                        <img className="edit-icon" src={Sold} alt="sold" />
-                      </button>
-                      <button
-                        className="icon-btn"
-                        onClick={() => {
-                          console.log(entry); // Log the entire entry object
-                          handleDeleteClick(entry.stock_id);
-                        }}
-                      >
-                        {" "}
-                        <img className="edit-icon" src={Cross} alt="cross" />
-                      </button>
+                    <button
+                      className="icon-btn"
+                      onClick={() => handleEditBtn(entry.stock_id)}
+                    >
+                      <img className="edit-icon" src={Edit} alt="edit" />
+                    </button>
+                    <button
+                      className="icon-btn"
+                      onClick={() => handleSoldBtn(entry.stock_id)}
+                    >
+                      {" "}
+                      <img className="edit-icon" src={Sold} alt="sold" />
+                    </button>
+                    <button
+                      className="icon-btn"
+                      onClick={() => {
+                        console.log(entry); // Log the entire entry object
+                        handleDeleteClick(entry.stock_id);
+                      }}
+                    >
+                      {" "}
+                      <img className="edit-icon" src={Cross} alt="cross" />
+                    </button>
                     {/* </div> */}
                   </td>
                 </tr>
@@ -404,18 +448,18 @@ const Stock: React.FC = () => {
           onFormSubmit={handleFormSubmit}
           selectedProduct={selectedProduct}
         />
-        < EditBtnModal
-        isOpen={isEditBtnModalOpen}
-        onClose={handleCloseBtnEditModal}
-        selectedProduct={selectedProduct}
-        updateStockList={handleStockListUpdate}
+        <EditBtnModal
+          isOpen={isEditBtnModalOpen}
+          onClose={handleCloseBtnEditModal}
+          selectedProduct={selectedProduct}
+          updateStockList={handleStockListUpdate}
         />
         <SoldListModal
-        isOpen={isSoldListModalOpen}
-        onClose={handleCloseSoldListModal}
-        selectedProduct={selectedProduct}
-        updateStockList={handleStockListUpdate}
-        handleDeleteStock = {handleDeleteClick}
+          isOpen={isSoldListModalOpen}
+          onClose={handleCloseSoldListModal}
+          selectedProduct={selectedProduct}
+          updateStockList={handleStockListUpdate}
+          handleDeleteStock={handleDeleteClick}
         />
       </div>
     </>

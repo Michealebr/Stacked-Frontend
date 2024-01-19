@@ -34,8 +34,8 @@ const [soldListEntries, setSoldListEntries] = useState<SoldEntry[]>([])
 const [fetchTrigger, setFetchTrigger] = useState(0);
 const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 const [isSoldEditBtnModalOpen, setSoldEditBtnModalOpen] = useState(false);
-
 const [sortOrder, setSortOrder] = useState('Recent');
+const [searchTermSold, setSearchTermSold] = useState("");
 
 // updates soldlist ui
 const handleSoldListUpdate = () => {
@@ -90,9 +90,15 @@ const handleDeleteClick = async (productId: string) => {
           total_payout: Number(entry.total_payout).toLocaleString(),
           purchase_price: Number(entry.purchase_price).toLocaleString()
         }))
-         const sortedData = sortOrder === 'Recent'
-          ? formattedData.slice().sort((a, b) => new Date(b.sold_date) - new Date(a.sold_date))
-          : formattedData.slice().sort((a, b) => new Date(a.sold_date) - new Date(b.sold_date));
+
+        const sortedData = formattedData.slice().sort((a, b) => {
+          const dateA = new Date(a.sold_date);
+          const dateB = new Date(b.sold_date);
+  
+          return sortOrder === 'Recent' ? dateB - dateA : dateA - dateB;
+        });
+
+
 
         setSoldListEntries(sortedData);
 
@@ -118,7 +124,7 @@ const handleDeleteClick = async (productId: string) => {
       if (response.ok) {
         // Parse the response to get the existing product data
         const existingProductData = await response.json();
-  
+  console.log(existingProductData)
         // Set the selected product with the existing data
         setSelectedProduct(existingProductData);
         // Open the Edit modal
@@ -170,9 +176,12 @@ const handleDeleteClick = async (productId: string) => {
           purchase_price: Number(entry.purchase_price).toLocaleString()
         }));
 
-        const sortedData = selectedOption.value === 'Recent'
-          ? formattedData.slice().sort((a, b) => new Date(b.sold_date) - new Date(a.sold_date))
-          : formattedData.slice().sort((a, b) => new Date(a.sold_date) - new Date(b.sold_date));
+        const sortedData = formattedData.slice().sort((a, b) => {
+          const dateA = new Date(a.sold_date);
+          const dateB = new Date(b.sold_date);
+  
+          return sortOrder === 'Recent' ? dateB - dateA : dateA - dateB;
+        });
 
         setSoldListEntries(sortedData);
         setSortOrder(selectedOption.value);
@@ -188,13 +197,28 @@ const handleDeleteClick = async (productId: string) => {
     }
   };
 
+
+  const filteredSoldEntries = soldListEntries.filter(
+    (entry) =>
+      entry.product_name.toLowerCase().includes(searchTermSold.toLowerCase()) ||
+      entry.product_sku.toLowerCase().includes(searchTermSold.toLowerCase())
+  );
+
   return (
     <>
       <div className="page page-layout">
         <div className="page-header">
           <div className="search-box">
             <img className="search-icon" src={SearchIcon} alt="search icon" />
-            <input className="searchbar" type="text"></input>
+            <input
+            className="searchbar" 
+            type="text"
+            value={searchTermSold}
+            onChange={(e) => {
+              setSearchTermSold(e.target.value);
+              console.log("Search Term:", e.target.value);
+            }}
+            />
           </div>
           <div className="btn-container">
             <DropDownBtn
@@ -226,7 +250,8 @@ const handleDeleteClick = async (productId: string) => {
               </tr>
             </thead>
             <tbody>
-              {soldListEntries.map((entry, index) => (
+            {(searchTermSold.length > 0 ? filteredSoldEntries : soldListEntries).map(
+    (entry, index) =>(
                 
                 <tr key={index} className="product-line">
                   {/* <div className="info-container"> */}
