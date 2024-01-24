@@ -1,0 +1,48 @@
+.settingpage{
+    overflow-y: hidden;
+}
+
+.grid-setting-body{
+    display: grid;
+    height: 600px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr) ;
+    gap: 35px;
+    margin-top: 40px;
+}
+.btn-card{
+    grid-column: 1/2;
+
+}
+.user-card{
+    grid-column: 2/3;
+    /* grid-row: 1/2; */
+}
+.btn-row{
+margin: 30px 30px;
+}
+.setting-btns {
+    box-shadow: none;
+    border: solid 1px #F4F4F4;
+    border-radius: 0px;
+    width: 270px;
+    font-size: 14px;
+    height: 35px;
+
+}
+.setting-btn-ctn-width{
+    width: 270px;
+
+
+}
+.drop-setting-btn-width{
+    width: 270px;
+    min-width: 270px;
+    border-radius: 0px;
+    height: 70px;
+    font-size: 14px;
+    overflow-y: scroll;
+    z-index: 3;
+
+
+}
