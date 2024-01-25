@@ -107,3 +107,7 @@
 .c4{
     grid-column: 3/6;
 }
+canvas{
+  /* height: 200px !important; */
+
+}
