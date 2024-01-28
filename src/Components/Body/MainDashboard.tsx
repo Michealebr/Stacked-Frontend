@@ -11,6 +11,9 @@ const mainDashboard = () => {
   // const [chartData, setChartData] = useState({});
   const [fetchTrigger, setFetchTrigger] = useState(0);
   const [totalProfitData , setTotalProfit] = useState([])
+  const [sumProfit , setSumProfit] = useState(0)
+  const [sumRev , setSumRev] = useState(0)
+
  
   const timeIntervals = [
     { value: 'This month', label: 'This Month' },
@@ -36,12 +39,23 @@ const fetchedChartData = async () => {
     if(response.ok){
       const chartData = await response.json();
 
+//calculates the total payout/ revenue 
+const sumAllRev = chartData.reduce((sum, item) => sum + parseFloat(item.total_payout), 0)
+setSumRev(sumAllRev.toLocaleString())
+// calculates the total profit 
+console.log(chartData)
+      const sumAllProfit = chartData.reduce((sum, item) =>  sum +  parseFloat(item.profit),0)
+      setSumProfit(sumAllProfit.toLocaleString());
+
+
       const groupedData = groupDataByMonth(chartData);
 
       const monthNames = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
       ];
+
+      
 
 const totalProfits = [...groupedData.entries()].map(([monthYear, monthData]) => {
   const [month, year] = monthYear.split('/');
@@ -71,6 +85,8 @@ setTotalProfit(totalProfits)
   
 }
 
+
+
 const groupDataByMonth = (data) => {
   return data.reduce((groupedData, item) => {
     const date = new Date(item.sold_date);
@@ -90,6 +106,8 @@ useEffect(() => {
 }, [fetchTrigger]);
 
 
+console.log(totalProfitData)
+
   return (
     <div className='main-dash'>
       <div className="filter-container">
@@ -99,7 +117,26 @@ useEffect(() => {
       </div>
       <div className="grid-container">
         <div className="card c1">
-        <BarChart data={totalProfitData} />
+          <div className='line-graph-header-ctn'>
+            <div className="total-num-ctn">
+              <p className="graph-title">Total Revenue</p>
+              <div className="graph-number-ctn">
+              <div className="graph-number">$ {sumRev}</div>
+              <div className="graph-percentage"></div>
+              </div>
+            </div>
+            <div className="total-num-ctn">
+            <p className="graph-title">Total Profit</p>
+            <div className="graph-number-ctn">
+              <div className="graph-number">$ {sumProfit}</div>
+              <div className="graph-percentage"></div>
+            </div>
+            </div>
+            
+          </div>
+          <div className="line-chart-ctn">
+          <BarChart data={totalProfitData} />
+          </div>
         </div>
         <div className="card c2"></div>
         <div className="card c3"></div>
