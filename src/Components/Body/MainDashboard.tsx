@@ -8,11 +8,17 @@ import BarChart from './BarChart';
 
 const mainDashboard = () => {
 
-  // const [chartData, setChartData] = useState({});
+  // const [soldChartData, soldCetChartData] = useState({});
   const [fetchTrigger, setFetchTrigger] = useState(0);
   const [totalProfitData , setTotalProfit] = useState([])
   const [sumProfit , setSumProfit] = useState(0)
   const [sumRev , setSumRev] = useState(0)
+
+  const [totalSoldUnits , setTotalSoldUnits] = useState(0)
+  const [totalStockUnits , setTotalStockUnits] = useState(0)
+  const [totalProjProfit , setTotalProjProfit] = useState(0)
+  const [totalStockCost , setTotalStockCost] = useState(0)
+
 
  
   const timeIntervals = [
@@ -31,24 +37,29 @@ const mainDashboard = () => {
   const handleChartDataUpdate = () => {
     setFetchTrigger((prev) => prev + 1);
   }
-
-const fetchedChartData = async () => {
+// fetch the sold data 
+const fetchSoldChartData = async () => {
 
   try{
     const response = await fetch("http://localhost:3009/api/soldlist");
     if(response.ok){
-      const chartData = await response.json();
+      const soldChartData = await response.json();
+      console.log(soldChartData)
 
 //calculates the total payout/ revenue 
-const sumAllRev = chartData.reduce((sum, item) => sum + parseFloat(item.total_payout), 0)
+const sumAllRev = soldChartData.reduce((sum, item) => sum + parseFloat(item.total_payout), 0)
 setSumRev(sumAllRev.toLocaleString())
+
 // calculates the total profit 
-console.log(chartData)
-      const sumAllProfit = chartData.reduce((sum, item) =>  sum +  parseFloat(item.profit),0)
-      setSumProfit(sumAllProfit.toLocaleString());
+const sumAllProfit = soldChartData.reduce((sum, item) =>  sum +  parseFloat(item.profit),0)
+setSumProfit(sumAllProfit.toLocaleString());
+// gets units sold 
+const soldUnitCount = soldChartData.length
+setTotalSoldUnits(soldUnitCount)
 
+// need to get all platforms sold and create a tally for pie chart 
 
-      const groupedData = groupDataByMonth(chartData);
+      const groupedData = groupDataByMonth(soldChartData);
 
       const monthNames = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -62,7 +73,6 @@ const totalProfits = [...groupedData.entries()].map(([monthYear, monthData]) => 
   const monthLabel = `${monthNames[parseInt(month, 10) - 1]} ${year}`;
   
   const totalProfit = monthData.reduce((sum, item) => sum + parseFloat(item.profit), 0);
-
   return {
     label: monthLabel,
     value: totalProfit,
@@ -70,6 +80,40 @@ const totalProfits = [...groupedData.entries()].map(([monthYear, monthData]) => 
 });
 
 setTotalProfit(totalProfits)
+
+    }
+    else {
+      console.error(
+        "Error fetching data:",
+        response.status,
+        response.statusText
+      );
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+  
+}
+
+const fetchStockData = async () => {
+
+  try{
+    const response = await fetch("http://localhost:3009/api/stocklist");
+    if(response.ok){
+      const stockChartData = await response.json();
+      console.log(stockChartData)
+
+const totalSumStockCost  = stockChartData.reduce((sum, item) => sum + parseFloat(item.total_cost), 0)
+setTotalStockCost(totalSumStockCost.toLocaleString())
+// gets stock units 
+const stockUnitCount = stockChartData.length
+setTotalStockUnits(stockUnitCount)
+
+// gets project profit for unsold stock
+const projectedStockProfit = stockChartData.reduce((sum, item ) => sum + parseFloat(item.expected_profit), 0)
+setTotalProjProfit(projectedStockProfit.toLocaleString())
+
+// need to get 3 or 4 most recent sold 
 
     }
     else {
@@ -102,7 +146,8 @@ const groupDataByMonth = (data) => {
 };
 
 useEffect(() => {
-  fetchedChartData();
+  fetchSoldChartData();
+  fetchStockData();
 }, [fetchTrigger]);
 
 
@@ -139,7 +184,26 @@ console.log(totalProfitData)
           </div>
         </div>
         <div className="card c2"></div>
-        <div className="card c3"></div>
+        <div className="card c3">
+          <div className="card-3-grid">
+            <div className="inner-card ic1">
+              <div className="inner-card-number">{totalStockUnits}</div>
+              <p className="inner-card-title">Stock Units</p>
+            </div>
+            <div className="inner-card ic2">
+            <div className="inner-card-number">{totalSoldUnits}</div>
+              <p className="inner-card-title">Units Sold</p>
+            </div>
+            <div className="inner-card ic3">
+            <div className="inner-card-number">$ {totalStockCost}</div>
+              <p className="inner-card-title">Stock Cost</p>
+            </div>
+            <div className="inner-card ic4">
+            <div className="inner-card-number">$ {totalProjProfit}</div>
+              <p className="inner-card-title">Projected Profit</p>
+            </div>
+          </div>
+        </div>
         <div className="card c4"></div>
 
       </div>

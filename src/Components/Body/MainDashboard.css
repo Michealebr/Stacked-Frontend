@@ -145,5 +145,38 @@ padding: 10px;
 }
 .graph-number{
   font-size: 14px;
+  color: #222222;
   font-weight: 600;
+}
+
+/* card 3 */
+.c3{
+  background-color: transparent;
+  box-shadow: none;
+}
+.card-3-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr) ;
+  height: 100%;
+  gap: 10px;
+}
+.inner-card{
+  background-color: white;
+  border-radius: 10px;
+ box-shadow: 0.2rem .2rem .5rem rgba(0, 0, 0, 0.1);
+ display: flex;
+ align-items: center;
+flex-direction: column;
+ justify-content: center;
+}
+.inner-card-number{
+  font-size: 30px;
+  font-weight: 700;
+  color: #222222;
+}
+.inner-card-title{
+/* font-weight: 600; */
+color: #222222;
+margin: 0px;
 }
