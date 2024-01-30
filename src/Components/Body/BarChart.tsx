@@ -1,67 +1,14 @@
-import { useRef, useEffect } from 'react';
-// import { Bar } from 'react-chartjs-2';
-import { Chart as chartjs } from 'chart.js/auto';
+
 import { Bar, Line } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
-// import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   PointElement,
-//   LineElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
-
-interface BarChartData {
+interface ChartData {
   label: string;
   value: number;
 }
 
-const BarChart: React.FC<{ data: BarChartData[]}> = ({ data }) => {
-
-    console.log(data)
-
-    // const chartRef = useRef(null);
-
-    // useEffect(() => {
-    //   if (chartRef.current) {
-    //     const chartInstance = (chartRef.current as any).chartInstance;
-    //     if (chartInstance) {
-    //       chartInstance.destroy();
-    //     }
-    //   }
-    // }, [data]);
-
-    // if (!data || data.length === 0) {
-    //     return <div>No data available for the chart.</div>;
-    //   }
-
-    
-// ChartJS.register(
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
-
-
+const BarChart: React.FC<{ data: ChartData[]}> = ({ data }) => {
 
       const chartData = {
         labels: data.map(item => item.label),
@@ -102,9 +49,6 @@ else if (maxDataValue < 3000 && maxDataValue > 1000) {
 }
 
 const stepSize = maxAxisValue / 2;
-
-// const maxAxisValueFormatted = maxAxisValue >= 1000 ? (maxAxisValue / 1000) + 'k' : maxAxisValue;
-// const stepSizeFormatted = stepSize >= 1000 ? (stepSize / 1000) + 'k' : stepSize;
 
       const options = {
         scales: {
