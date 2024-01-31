@@ -307,34 +307,12 @@ count: number
             
           <div className="inner-card ic5">
           <h4 className="card-title platform-title">Platform Data</h4>
-            <div className="platform-data-ctn">
-              <div className="platform-number">3</div>
-              <p className="platform-name">StockX</p>
-              </div>
-              <div className="platform-data-ctn">
-              <div className="platform-number">2</div>
-              <p className="platform-name">Laced</p>
-              </div>
-              <div className="platform-data-ctn">
-              <div className="platform-number">0</div>
-              <p className="platform-name">Ebay</p>
-              </div>
-              <div className="platform-data-ctn">
-              <div className="platform-number">1</div>
-              <p className="platform-name">Alias</p>
-              </div>
-              <div className="platform-data-ctn">
-              <div className="platform-number">2</div>
-              <p className="platform-name">Instagram</p>
-              </div>
-              <div className="platform-data-ctn">
-              <div className="platform-number">6</div>
-              <p className="platform-name">Website</p>
-              </div>
-              <div className="platform-data-ctn">
-              <div className="platform-number">2</div>
-              <p className="platform-name">Other</p>
-              </div>
+{platformTally.sort((a, b) => b.count - a.count).map((entry, index) => (
+    <div className="platform-data-ctn" key={index}>
+    <div className="platform-number">{entry.count}</div>
+    <p className="platform-name">{entry.platform}</p>
+    </div>
+))}
           </div>
           <div className="inner-card ic6">
             <div className="doughnut-chart-ctn">

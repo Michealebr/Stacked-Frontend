@@ -38,6 +38,9 @@ if (maxDataValue < 200000 && maxDataValue > 100000) {
 } else if (maxDataValue < 30000 && maxDataValue > 10000) {
   maxAxisValue = 30000;   // Set a predefined max value, e.g., 2000
 }
+else if (maxDataValue < 10000 && maxDataValue > 5000) {
+  maxAxisValue = 10000;   // Set a predefined max value, e.g., 2000
+}
 else if (maxDataValue < 5000 && maxDataValue > 3000) {
   maxAxisValue = 5000;   // Set a predefined max value, e.g., 2000
 }
