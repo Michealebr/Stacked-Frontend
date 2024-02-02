@@ -19,10 +19,10 @@
 }
 .searchbar{
     width: 400px;
-    height: 40px;
+    height: 35px;
     background-color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     padding-left: 40px;
     align-items: center;
     align-self: center;
@@ -37,7 +37,7 @@
     position: relative;
     left: 10px;
     height: 20px;
-    top: 4px;
+    top: 6px;
 }
 .btn-container{
     display: flex;

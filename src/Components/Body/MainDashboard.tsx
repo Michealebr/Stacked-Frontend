@@ -232,9 +232,16 @@ count: number
 
   return (
     <div className="main-dash">
+      <div className="page-header">
       <div className="filter-container">
-        <DropdownButton intervals={timeIntervals} svg={Calander} />
-        <DropdownButton intervals={products} svg={Stock} />
+        {/* <DropdownButton intervals={timeIntervals} svg={Calander} /> */}
+        {/* <DropdownButton intervals={products} svg={Stock} /> */}
+        <div className="filter-text">30 Days</div>
+        <div className="filter-text">3 Months</div>
+        <div className="filter-text">12 Months</div>
+        <div className="filter-text">All Time</div>
+
+      </div>
       </div>
       <div className="grid-container">
         <div className="card c1">
