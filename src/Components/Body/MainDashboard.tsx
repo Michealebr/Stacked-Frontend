@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import "./MainDashboard.css";
-import Calander from "src/assets/Calander.svg";
-import Stock from "src/assets/Stock.svg";
-import DropdownButton from "./DropdownButton";
 import BarChart from "./BarChart";
 import DoughnutChart from "./pages/DoughnutChart";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const mainDashboard = () => {
 
@@ -39,21 +38,11 @@ count: number
   const [totalStockCost, setTotalStockCost] = useState(0);
   const [recentSold, setRecentSold] = useState<SoldEntry[]>([]);
   const [platformTally, setPlatformTally] = useState<PlatformTally[]>([]);
-
+  const [chartFilter, setChartFilter] = useState("YTD");
+  const [customStartDate, setCustomStartDate] = useState('');
+const [customEndDate, setCustomEndDate] = useState('');
 
   
-  const timeIntervals = [
-    { value: "This month", label: "This Month" },
-    { value: "3months", label: "3 Months" },
-    { value: "6months", label: "6 Months" },
-    { value: "This year", label: "This Year" },
-  ];
-  const products = [
-    { value: "All Products", label: "All Products" },
-    { value: "Footwear", label: "Footwear" },
-    { value: "Clothes", label: "Clothes" },
-    { value: "Other", label: "Other" },
-  ];
 
   const handleChartDataUpdate = () => {
     setFetchTrigger((prev) => prev + 1);
@@ -64,10 +53,14 @@ count: number
   // fetch the sold data
   const fetchSoldChartData = async () => {
     try {
-      const response = await fetch("http://localhost:3009/api/soldlist");
+      let apiUrl = `http://localhost:3009/api/solddata?filter=${chartFilter}`
+      if (chartFilter === 'Custom'){
+        apiUrl += `&start=${customStartDate}&end=${customEndDate}`;
+      }
+      const response = await fetch(apiUrl);
       if (response.ok) {
         const soldChartData = await response.json();
-        console.log(soldChartData);
+        console.log(soldChartData, "sold");
 
         //calculates the total payout/ revenue
         const sumAllRev = soldChartData.reduce(
@@ -118,8 +111,15 @@ count: number
 
         // console.log(recentSoldItems, "recent sold")
 
-        const groupedData = groupDataByMonth(soldChartData);
 
+        // group data by YTD 
+        // group data by ALL Time 
+        // group data by Custom  
+
+        const groupedData = groupDataByTime(soldChartData, chartFilter);
+
+
+     
         const monthNames = [
           "Jan",
           "Feb",
@@ -134,31 +134,69 @@ count: number
           "Nov",
           "Dec",
         ];
-
-        const totalProfits = [...groupedData.entries()].map(
-          ([monthYear, monthData]) => {
-            const [month, year] = monthYear.split("/");
+        
+        const totalProfits = [...groupedData.entries()].map(([timeKey, timeData]) => {
+          if (chartFilter === 'YTD') {
+            // Grouping by month
+            const [month, year] = timeKey.split("/");
             const monthLabel = `${monthNames[parseInt(month, 10) - 1]} ${year}`;
-
-            const totalProfit = monthData.reduce(
+        
+            const totalProfit = timeData.reduce(
               (sum, item) => sum + parseFloat(item.profit),
               0
             );
+        
+            return {
+              label: monthLabel,
+              value: totalProfit,
+            };
+          } else if (chartFilter === 'AllTime') {
+            // Grouping by year
+            const yearLabel = timeKey;
+        
+            const totalProfit = timeData.reduce(
+              (sum, item) => sum + parseFloat(item.profit),
+              0
+            );
+        
+            return {
+              label: yearLabel,
+              value: totalProfit,
+            };
+          }
+          else if (chartFilter === 'Custom'){
+
+            const [month, year] = timeKey.split("/");
+            const monthLabel = `${monthNames[parseInt(month, 10) - 1] } ${year}`;
+        
+            const totalProfit = timeData.reduce(
+              (sum, item) => sum + parseFloat(item.profit),
+              0
+            );
+        
             return {
               label: monthLabel,
               value: totalProfit,
             };
           }
-        );
-        console.log(totalProfits, "hahah")
-
-        const sortedTotalProfits = totalProfits.sort((a, b) => {
+        
+          // Handle other cases or return default values
+          return {};
+        })
+        .filter(item => item.label !== '') // Remove empty labels
+        
+        const sortedTotalProfits = totalProfits.flat().sort((a, b) => {
           const aDate = new Date(a.label);
           const bDate = new Date(b.label);
           return aDate - bDate;
         });
 
+        
+        
         setTotalProfit(sortedTotalProfits);
+        console.log(sortedTotalProfits, 'haha')
+     
+     
       } else {
         console.error(
           "Error fetching data:",
@@ -169,6 +207,11 @@ count: number
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+
+
+
+
+    
   };
 
 
@@ -210,36 +253,135 @@ count: number
     }
   };
 
-
-  const groupDataByMonth = (data) => {
-    return data.reduce((groupedData, item) => {
-      const date = new Date(item.sold_date);
-      const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
-
-      if (!groupedData.has(monthYear)) {
-        groupedData.set(monthYear, []);
-      }
-
-      groupedData.get(monthYear).push(item);
-      return groupedData;
-    }, new Map());
+  const groupDataByTime = (data, filter) => {
+    if (filter === 'YTD') {
+      return data.reduce((groupedData, item) => {
+        const date = new Date(item.sold_date);
+        if (date.getFullYear() === new Date().getFullYear()) {
+          const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
+          if (!groupedData.has(monthYear)) {
+            groupedData.set(monthYear, []);
+          }
+          groupedData.get(monthYear).push(item);
+        }
+        return groupedData;
+      }, new Map());
+    } else if (filter === 'AllTime') {
+      return data.reduce((groupedData, item) => {
+        const date = new Date(item.sold_date);
+        const year = date.getFullYear();
+        if (!groupedData.has(year)) {
+          groupedData.set(year, []);
+        }
+        groupedData.get(year).push(item);
+        return groupedData;
+      }, new Map());
+    } else if (filter === 'Custom') {
+      return data.reduce((groupedData, item) => {
+        const date = new Date(item.sold_date);
+        const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`;
+  
+        if (!groupedData.has(monthYear)) {
+          groupedData.set(monthYear, []);
+        }
+  
+        groupedData.get(monthYear).push(item);
+        return groupedData;
+      }, new Map());
+    }
+  
+    return new Map(); // Default to an empty map if no filter matches
   };
 
+  const handleFilterClick = (filter) => {
+console.log(customStartDate , "custom start date")
+console.log(customEndDate)
+
+    setChartFilter(filter);
+    console.log(filter, "filter")
+    handleChartDataUpdate(); // Trigger data fetch
+  };
+
+  
+  const getMaxEndDate = (startDate) => {
+    const maxEndDate = new Date(startDate);
+    const currentDate = new Date();
+  
+    // Set the maximum date 11 months from the start date
+    maxEndDate.setMonth(maxEndDate.getMonth() + 11);
+  
+    // If the calculated max end date is in the future, set it to the current date
+    if (maxEndDate > currentDate) {
+      return currentDate;
+    }
+  
+    return maxEndDate;
+  };
+
+
+  // const handleCustomFilter = () => {
+  //   setChartFilter("Custom");
+  // handleChartDataUpdate()
+  // }
   useEffect(() => {
     fetchSoldChartData();
     fetchStockData();
   }, [fetchTrigger]);
 
+  useEffect(() => {
+    // Execute when fetchTrigger, chartFilter, customStartDate change
+    // (or any other dependencies that should trigger the general updates)
+    // ...
+  
+    // Execute when fetchTrigger, chartFilter, customEndDate, customStartDate change
+    if (chartFilter === 'Custom' && customEndDate && customStartDate) {
+      fetchSoldChartData();
+    }
+  }, [fetchTrigger,chartFilter, customStartDate, customEndDate]);
+
   return (
     <div className="main-dash">
       <div className="page-header">
       <div className="filter-container">
-        {/* <DropdownButton intervals={timeIntervals} svg={Calander} /> */}
-        {/* <DropdownButton intervals={products} svg={Stock} /> */}
-        <div className="filter-text">30 Days</div>
-        <div className="filter-text">3 Months</div>
-        <div className="filter-text">12 Months</div>
-        <div className="filter-text">All Time</div>
+      <div className={`filter-text ${chartFilter === "YTD" ? "active" : ""}`} onClick={() => handleFilterClick("YTD")}>
+    YTD
+  </div>
+  <div className={`filter-text ${chartFilter === "AllTime" ? "active" : ""}`} onClick={() => handleFilterClick("AllTime")}>
+    All Time
+  </div>
+  <div
+            className={`filter-text ${chartFilter === 'Custom' ? 'active' : ''}`}
+            onClick={() => handleFilterClick('Custom')}
+          >
+            Custom
+          </div>
+          {chartFilter === 'Custom' && (
+            <div className="date-picker-container">
+<DatePicker
+  selected={customStartDate}
+  onChange={(date) => {
+    setCustomStartDate(date.toISOString().split('T')[0]);
+            console.log(date, "date is ")}}
+  selectsStart
+  startDate={customStartDate}
+  endDate={customEndDate}
+  dateFormat="MM/yyyy" // Display only months and years
+  showMonthYearPicker // Display only months and years
+  maxDate={new Date()}
+/>
+<DatePicker
+  selected={customEndDate}
+  onChange={(date) => setCustomEndDate(date.toISOString().split('T')[0])}
+  selectsEnd
+  startDate={customStartDate}
+  endDate={customEndDate}
+  dateFormat="MM/yyyy" // Display only months and years
+  showMonthYearPicker // Display only months and years
+  maxDate={getMaxEndDate(customStartDate)}
+  minDate={customStartDate}
+/>
+            </div>
+          )}
 
       </div>
       </div>
@@ -262,7 +404,7 @@ count: number
             </div>
           </div>
           <div className="line-chart-ctn">
-            <BarChart data={totalProfitData} />
+            <BarChart data={totalProfitData} chartFilter={chartFilter}/>
           </div>
         </div>
         <div className="card c2">

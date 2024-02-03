@@ -6,6 +6,7 @@
     top: 0;
     left: 0;
     flex-direction: column;
+    width: 88px;
 }
 
 .logo-conatiner{
@@ -16,14 +17,13 @@
     align-items: center;
     flex-direction: column;
     display: flex;
-    padding: 25px 0px;
+    padding: 20px 0px;
     gap: 30px;
     background-color: white ;
     margin: 13px;
     border-radius: 40px;
     box-shadow: 0.2rem .2rem .5rem rgba(0, 0, 0, 0.1);
-
-
+    width: 50px;
 }
 .logo{
     height: 40px;
@@ -31,4 +31,12 @@
 .nav-icon{
     height: 20px;
     width: 20px;
+    opacity: .4;
+}
+.nav-container{
+    display: flex;
+    justify-content: center;
+}
+.active-page {
+   opacity: 1;
 }

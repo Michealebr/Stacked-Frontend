@@ -1,16 +1,19 @@
 import React from 'react'
 import './Navbar.css'
-import {Link} from 'react-router-dom';
+import {Link, useLocation } from 'react-router-dom';
 
 
-// interface pageName {
-//   Link: string;
-// }
-// interface navItems {
-//   Link: string;
-// }
+interface navItems {
+  link: string;
+  classname: string
+  icon: string
+  text: string
+}
 
-const Navbar = ({Navitems}) => {
+const Navbar: React.FC<{ Navitems: navItems[]}>  = ({Navitems}) => {
+
+  const location = useLocation();
+
   return (
     <div className='header'>
       <div className='logo-container'>
@@ -20,8 +23,9 @@ const Navbar = ({Navitems}) => {
       <ul className='navlist'>
         {Navitems.map((item, index) => (
           <Link to={item.link} key={index}>
-           <li className={item.class}>
-            <img src={item.icon} alt={item.text} className='nav-icon' />
+          <li className={`nav-btn ${item.classname}`}>
+            <img src={item.icon} alt={item.text} className={`nav-icon ${location.pathname === item.link ? 'active-page' : ''}`} />
+            
            </li>
            </Link>
         ))}

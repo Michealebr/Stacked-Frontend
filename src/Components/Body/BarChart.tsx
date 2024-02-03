@@ -6,12 +6,21 @@ Chart.register(...registerables);
 interface ChartData {
   label: string;
   value: number;
+  chartFilter:string
 }
 
-const BarChart: React.FC<{ data: ChartData[]}> = ({ data }) => {
+
+const BarChart: React.FC<{ data: ChartData[]}> = ({ data , chartFilter}) => {
+  // const monthNames = [
+  //   "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  // ];
+  const uniqueMonths = [...new Set(data.map(item => item.label))];
+
+
+// console.log(uniqueMonths)
 
       const chartData = {
-        labels: data.map(item => item.label),
+      labels:  uniqueMonths,
         type: 'Line',
         datasets: [{
           // label: 'Total Profit',
@@ -53,85 +62,75 @@ else if (maxDataValue < 3000 && maxDataValue > 1000) {
 
 const stepSize = maxAxisValue / 2;
 
-      const options = {
-        scales: {
-
-          
-          x: {
-            type: 'category',
-            position: 'bottom',
-            
-            grid:{
-              drawTicks: false,
-              display: false,
-              
-            },
-            ticks: {
-              padding: 10,
-              font:{
-                family: 'laced',
-                size: 11,
-                
-              }
-            },
-
-          },
-          y: {
-            type: 'linear',
-            position: 'left',
-
-            min: 0, 
-            max: maxAxisValue,
-            grid:{
-              drawTicks: false,
-              // drawOnChartArea: false,
-            },
-
-
-            ticks: {
-              stepSize: stepSize,
-              min: 0,
-              padding: 10,
-              // color: 'black',
-              callback: function(value, index, values) {
-                if (value >= 1000) {
-                  return (value / 1000).toFixed(0) + 'k' ;
-                } else {
-                  return value;
-                }
-              },
-              font:{
-                // family: 'laced',
-                size: 12,
-              }
-            },
-
-          },
-          
+const options = {
+  scales: {
+    x: {
+      type: 'category',
+      position: 'bottom',
+      grid: {
+        drawTicks: false,
+        display: false,
+      },
+      ticks: {
+        padding: 10,
+        font: {
+          family: 'laced',
+          size: 11,
         },
-        elements: {
-          line: {
-            // tension: 0.5
+        callback: (value, index, values) => {
+          if(index === 0 || index === values.length - 1){
+            return chartData.labels[index];
+          }
+
+        },
+      },
+    },
+    y: {
+      type: 'linear',
+      position: 'left',
+      min: 0,
+      max: maxAxisValue,
+      grid: {
+        drawTicks: false,
+      },
+      ticks: {
+        stepSize: stepSize,
+        min: 0,
+        padding: 10,
+        callback: function (value, index, values) {
+          if (value >= 1000) {
+            return (value / 1000).toFixed(0) + 'k';
+          } else {
+            return value;
           }
         },
-        plugins: {
-          legend: {
-            display: false,
-            position: 'top',
-          },
-          title: {
-            display: false,
-          },
+        font: {
+          size: 12,
         },
-        tooltips: {
-          mode: 'index',
-          intersect: false,
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        height: 200, // Set the height
-    width: 500, // Set the width
-      };
+      },
+    },
+  },
+  elements: {
+    line: {},
+  },
+  plugins: {
+    legend: {
+      display: false,
+      position: 'top',
+    },
+    title: {
+      display: false,
+    },
+  },
+  tooltips: {
+    mode: 'index',
+    intersect: false,
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+  height: 200, // Set the height
+  width: 500, // Set the width
+};
 
   return (
     <>
