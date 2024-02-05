@@ -8,19 +8,20 @@
     border: none;
     background-color: white;
     box-shadow: 0.2rem .1rem 1rem rgba(0, 0, 0, 0.1);
-    height: 40px;
-    border-radius: 10px;
+    height: 35px;
+    border-radius: 5px;
     cursor: pointer;
     padding: 0px 5px;
 }
 .drop-down-icon{
-    height: 20px;
+    height: 15px;
     padding: 0px 5px;
     align-items: left;
     display: flex;
 }
 .content-text{
     margin: 0px 15px 0px 10px; 
+    font-size: 12px;
 }
 .right-icon{
     margin-right: 8px;

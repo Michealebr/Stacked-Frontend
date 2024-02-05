@@ -447,12 +447,14 @@ const Stock: React.FC = () => {
           onClose={handleCloseEditModal}
           onFormSubmit={handleFormSubmit}
           selectedProduct={selectedProduct}
+          closeAddModal={handleCloseAddModal}
         />
         <EditBtnModal
           isOpen={isEditBtnModalOpen}
           onClose={handleCloseBtnEditModal}
           selectedProduct={selectedProduct}
           updateStockList={handleStockListUpdate}
+
         />
         <SoldListModal
           isOpen={isSoldListModalOpen}

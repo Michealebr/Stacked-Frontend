@@ -29,15 +29,18 @@
     outline: none;
     padding-right: 10px;
     color: black;
-    margin-left: -23px;
+    margin-left: -15px;
     box-shadow: 0.2rem .2rem .5rem rgba(0, 0, 0, 0.1);
+    padding-top: 0px;
+    padding-bottom: 0px;
+
 
 }
 .search-icon{
     position: relative;
     left: 10px;
-    height: 20px;
-    top: 6px;
+    height: 15px;
+    top: 3px;
 }
 .btn-container{
     display: flex;
@@ -49,13 +52,15 @@
     border: none;
     background-color: white;
     box-shadow: 0.2rem .1rem 1rem rgba(0, 0, 0, 0.1);
-    height: 40px;
-    border-radius: 10px;
+    height: 35px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 12px ;
 }
 .add-icon{
-    height: 20px;
+    height: 15px;
     margin-right: 10px;
+    margin-top: 3px;
    
 
 }
@@ -69,17 +74,7 @@
     padding: 0px 5px;
 }
 
-/* .product-line{
-    display: flex;
-    height: 71px;
-    border-bottom: 1px solid #efefef;
-    margin: 0px 30px;
-    align-items: center;
-    justify-content: space-between;
-    width: 980px;
-    margin-bottom: 1px;
-    
-} */
+
 .product-line {
     position: relative;
     height: 70px;

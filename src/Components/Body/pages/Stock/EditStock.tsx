@@ -12,6 +12,7 @@ interface SelectSizeBtn {
 
 interface EditStockProps {
   onClose: () => void;
+  closeAddModal: () => void;
   onFormSubmit: (formData: any) => void;
   selectedProduct: Product;
 }
@@ -55,7 +56,7 @@ const productSizes = [
   { value: "17", label: "17", quantity: 0 },
 ];
 
-const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedProduct }) => {
+const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedProduct, closeAddModal }) => {
 
   // Your logic for handling the editing of an existing stock item
   const [isClicked, setClick] = useState(false);
@@ -154,6 +155,7 @@ const expectedProfit =  expectedSalePrice - totalcost
 
     // Close the modal or perform other actions
     onClose();
+    closeAddModal()
   };
   const handleQuantityChange = (size, newQuantity) => {
     setSelectedSizes((prevSizes) =>

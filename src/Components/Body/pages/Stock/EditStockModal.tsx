@@ -9,7 +9,7 @@ interface EditStockModalProps {
     selectedProduct: Product | null; 
   }
 
-  const EditStockModal: React.FC<EditStockModalProps> = ({ isOpen, onClose, onFormSubmit, selectedProduct }) => {
+  const EditStockModal: React.FC<EditStockModalProps> = ({ isOpen, onClose, onFormSubmit, selectedProduct, closeAddModal }) => {
     
     if (!isOpen) {
       return null;
@@ -35,7 +35,7 @@ interface EditStockModalProps {
     return (
       <div className="modal modal2">
         <div className="modal-content mc2">
-          <EditStock onClose={onClose} onFormSubmit={onFormSubmit} selectedProduct={selectedProduct || {}} />
+          <EditStock onClose={onClose} onFormSubmit={onFormSubmit} selectedProduct={selectedProduct || {}} closeAddModal={closeAddModal} />
         </div>
       </div>
     );
