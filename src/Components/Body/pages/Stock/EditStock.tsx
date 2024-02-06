@@ -2,6 +2,7 @@ import "./EditStock.css";
 import Cross from "src/assets/X.svg";
 import { useState, useEffect } from "react";
 import DropdownButton from "../../DropdownButton";
+import { useCurrency } from 'src/CurrencyContext'
 
 interface SelectSizeBtn {
   value: string;
@@ -22,11 +23,6 @@ const shoeSizeFilter = [
   { value: "US", label: "US" },
 ];
 
-const currency = [
-  { value: "£", label: "£" },
-  { value: "$", label: "$" },
-  { value: "€", label: "€" },
-];
 
 const productSizes = [
   { value: "3", label: "3", quantity: 0 },
@@ -57,6 +53,8 @@ const productSizes = [
 ];
 
 const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedProduct, closeAddModal }) => {
+
+  const { currency } = useCurrency();
 
   // Your logic for handling the editing of an existing stock item
   const [isClicked, setClick] = useState(false);
@@ -264,14 +262,17 @@ const expectedProfit =  expectedSalePrice - totalcost
               Purchase Price*
             </label>
             <div className="lol">
-              <DropdownButton
+              {/* <DropdownButton
                 intervals={currency}
                 buttonWidth="currency-btn"
                 arrowSize="currency-btn-arrow-size"
                 btnContainerWidth="curreny-btn-ctn-width"
                 dropdownWidth="drop-currency-btn-width"
                 svg={null}
-              />
+              /> */}
+              <div className="currency-box">
+              {currency}
+              </div>
               <input
                 className="purchase-price-input input-info-ps"
                 type="number"

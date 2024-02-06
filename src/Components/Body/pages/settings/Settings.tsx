@@ -1,8 +1,9 @@
-import React from 'react'
+import { useEffect  } from "react";
 import './Settings.css'
 import DropdownButton from '../../DropdownButton'
+import { useCurrency } from 'src/CurrencyContext';
 
-const currency = [
+const currencyTable = [
   { value: "£", label: "Pounds £" },
   { value: "$", label: "Dollars $" },
   { value: "€", label: "Euro €" },
@@ -20,6 +21,19 @@ const sizePreference  = [
 
 // and then we can populate the users details which will show in settings so email name so and so
 const Settings = () => {
+
+  const { currency, setCurrency } = useCurrency();
+
+  useEffect(() => {
+    // This effect will be triggered whenever selectedPlatform changes
+    console.log("Selected Currency:", currency);
+  }, [currency]);
+
+  const handleCurrencySelect = (selectedValue: string) => {
+    setCurrency(selectedValue);
+  };
+
+
   return (
     <div className="page page-layout settingpage">
 
@@ -30,10 +44,11 @@ const Settings = () => {
       <label className="price-input-label" htmlFor="Platform">
       Primary currency 
             </label>
-      <DropdownButton intervals={currency}
+      <DropdownButton intervals={currencyTable}
       buttonWidth="setting-btns"
       btnContainerWidth="setting-btn-ctn-width"
       dropdownWidth="drop-setting-btn-width"
+      onSelect={handleCurrencySelect}
       />
       </div>
       <div className='btn-row'>

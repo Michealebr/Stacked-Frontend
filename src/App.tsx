@@ -12,6 +12,7 @@ import Stock from 'src/assets/Stock.svg'
 import Sales from 'src/assets/Sales.svg'
 import Settings from 'src/assets/Settings.svg'
 import { BrowserRouter as Router, Routes, Route,} from 'react-router-dom';
+import { CurrencyProvider } from './CurrencyContext'
 
 
 
@@ -26,7 +27,7 @@ function App() {
  ]
 
   return (
-   
+   <CurrencyProvider>
     <Router>
        {/* <> */}
      <Navbar Navitems = {navItems}/>
@@ -41,7 +42,7 @@ function App() {
      {/* <MainDashboard></MainDashboard> */}
      {/* </> */}
      </Router>
-    
+     </CurrencyProvider>
   )
 }
 

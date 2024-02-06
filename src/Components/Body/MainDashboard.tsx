@@ -4,28 +4,31 @@ import BarChart from "./BarChart";
 import DoughnutChart from "./pages/DoughnutChart";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useCurrency } from 'src/CurrencyContext'
 
-const mainDashboard = () => {
-
-
-  interface SoldEntry {
-    product_name: string;
-  size: string;
-  purchase_price: number;
-  product_sku: string;
-  img_url: string;
-  sizes: string | [];
-  value: string;
-  acquisition_date: string;
-  total_cost: number;
-  profit: number;
-  total_payout: number;
-  platform: string;
-  }
-  interface PlatformTally {
+interface SoldEntry {
+  product_name: string;
+size: string;
+purchase_price: number;
+product_sku: string;
+img_url: string;
+sizes: string | [];
+value: string;
+acquisition_date: string;
+total_cost: number;
+profit: number;
+total_payout: number;
+platform: string;
+}
+interface PlatformTally {
 platform : string
 count: number
-  }
+}
+const mainDashboard = () => {
+  const { currency } = useCurrency();
+
+  
+  
 
   // const [soldChartData, soldCetChartData] = useState({});
   const [fetchTrigger, setFetchTrigger] = useState(0);
@@ -391,14 +394,14 @@ console.log(customEndDate)
             <div className="total-num-ctn">
               <p className="graph-title">Total Revenue</p>
               <div className="graph-number-ctn">
-                <div className="graph-number">$ {sumRev}</div>
+                <div className="graph-number">{currency} {sumRev}</div>
                 <div className="graph-percentage"></div>
               </div>
             </div>
             <div className="total-num-ctn">
               <p className="graph-title">Total Profit</p>
               <div className="graph-number-ctn">
-                <div className="graph-number">$ {sumProfit}</div>
+                <div className="graph-number">{currency} {sumProfit}</div>
                 <div className="graph-percentage"></div>
               </div>
             </div>
@@ -426,7 +429,7 @@ console.log(customEndDate)
               
             </div>
             <div className="recent-sold-profit">
-            $ {parseFloat(entry.profit) % 1 !== 0 ? parseFloat(entry.profit).toFixed(2) : parseInt(entry.profit, 10)}
+            {currency} {parseFloat(entry.profit) % 1 !== 0 ? parseFloat(entry.profit).toFixed(2) : parseInt(entry.profit, 10)}
             </div>
           </div>
         ))}
@@ -442,11 +445,11 @@ console.log(customEndDate)
               <p className="inner-card-title">Units Sold</p>
             </div>
             <div className="inner-card ic3">
-              <div className="inner-card-number">$ {totalStockCost}</div>
+              <div className="inner-card-number">{currency} {totalStockCost}</div>
               <p className="inner-card-title">Stock Cost</p>
             </div>
             <div className="inner-card ic4">
-              <div className="inner-card-number">$ {totalProjProfit}</div>
+              <div className="inner-card-number">{currency} {totalProjProfit}</div>
               <p className="inner-card-title">Projected Profit</p>
             </div>
           </div>

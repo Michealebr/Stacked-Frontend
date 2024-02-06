@@ -61,8 +61,10 @@ border-radius: 5px;
 }
 .react-datepicker-wrapper{
   height: 35px;
-  display: flex;
+  display: flex !important;
   align-items: center;
+
+
 }
 .react-datepicker-wrapper:first-child{
   border-right: 1px solid #f5f5f5 ;

@@ -224,6 +224,7 @@ width: 150px;
     font-size: 14px;
     padding: 0px 10px ;
     width: 140px;
+    /* cursor: pointer; */
 }
 .price-input-label{
     display: flex;
@@ -255,4 +256,14 @@ margin-bottom: 5px;
   ::-webkit-scrollbar-thumb {
     background-color: #f1f1f1; /* Color of the thumb */
     border-radius: 6px; /* Rounded corners of the thumb */
+  }
+
+  .currency-box{
+    width: 57px;
+    background-color: #F4F4F4;
+    border-radius: 5px 0px 0px 5px ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
   }

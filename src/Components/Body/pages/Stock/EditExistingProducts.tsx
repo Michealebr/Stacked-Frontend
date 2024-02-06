@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Cross from "src/assets/X.svg";
 import DropdownButton from "../../DropdownButton";
+import { useCurrency } from 'src/CurrencyContext'
 // import { Product } from 'electron';
 
 
@@ -27,17 +28,13 @@ interface EditBtnModalProps {
     shipping_cost: number;
     price: number
   }
-  const currency = [
-    { value: "£", label: "£" },
-    { value: "$", label: "$" },
-    { value: "€", label: "€" },
-  ];
+
 
   
 
 const EditExistingProducts: React.FC<EditBtnModalProps> = ({ onClose , selectedProduct, updateStockList }) => {
 
-
+  const { currency } = useCurrency();
     const currentDate = new Date().toISOString().split("T")[0];
 
   // for the form
@@ -145,14 +142,17 @@ const handleBlur = (value: number | string, setState: React.Dispatch<React.SetSt
             
           </label>
           <div className="lol">
-            <DropdownButton
+            {/* <DropdownButton
               intervals={currency}
               buttonWidth="currency-btn"
               arrowSize="currency-btn-arrow-size"
               btnContainerWidth="curreny-btn-ctn-width"
               dropdownWidth="drop-currency-btn-width"
               svg={null}
-            />
+            /> */}
+            <div className="currency-box">
+              {currency}
+              </div>
             <input
               className="purchase-price-input input-info-ps"
               type="number"

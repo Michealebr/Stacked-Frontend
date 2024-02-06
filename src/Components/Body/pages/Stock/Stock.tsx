@@ -11,6 +11,7 @@ import AddStockModal from "./AddStockModal";
 import EditStockModal from "./EditStockModal";
 import EditBtnModal from "./EditBtnModal";
 import SoldListModal from "./SoldListModal";
+import { useCurrency } from 'src/CurrencyContext'
 
 interface StockEntry {
   product_name: string;
@@ -29,6 +30,9 @@ interface StockEntry {
 interface Product {}
 
 const Stock: React.FC = () => {
+
+  const { currency } = useCurrency();
+
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isEditBtnModalOpen, setEditBtnModalOpen] = useState(false);
@@ -396,10 +400,10 @@ const Stock: React.FC = () => {
                   {/* </div> */}
                   {/* <div className="product-price-container"> */}
                   <td className="stock-text total-cost-box">
-                    ${entry.total_cost}
+                  {currency}{entry.total_cost}
                   </td>
-                  <td className="stock-text">${entry.expected_sale_price}</td>
-                  <td className="stock-text">{entry.expected_profit}</td>
+                  <td className="stock-text">{currency}{entry.expected_sale_price}</td>
+                  <td className="stock-text">{currency}{entry.expected_profit}</td>
                   {/* </div> */}
                   <td className="stock-text date-box">
                     {formatDate(entry.acquisition_date)}

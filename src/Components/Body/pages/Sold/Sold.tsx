@@ -7,10 +7,13 @@ import Cross from "src/assets/X.svg";
 
 import DropDownBtn from '@/Components/UsefulComponents/DropDownBtn'
 import EditSoldModal from '../Sold/EditSoldModal';
-
+import { useCurrency } from 'src/CurrencyContext'
 
 
 const Sold: React.FC = () => {
+
+  const { currency } = useCurrency();
+
   const productStockFilter = [
     { value: 'Recent', label: 'Recent' },
     { value: 'Oldest', label: 'Oldest' },
@@ -241,12 +244,12 @@ const handleDeleteClick = async (productId: string) => {
                 <th className="th-title" id="img"></th>
                 <th className="th-title" id="name-sku">Name & Sku</th>
                 <th className="th-title" id="size">Size</th>
-                <th className="th-title" id="purchase-price">Cost</th>
-                <th className="th-title" id="expected-sale-price">Payout</th>
-                <th className="th-title" id="expected-profit">P/L</th>
-                <th className="th-title" id="expected-profit">Platform</th>
-                <th className="th-title" id="purchase-date">Sold Date</th>
-                <th className="th-title" id="Product-btn"></th>
+                <th className="th-title" id="cost">Cost</th>
+                <th className="th-title" id="payout">Payout</th>
+                <th className="th-title" id="p-l">P/L</th>
+                <th className="th-title" id="platform">Platform</th>
+                <th className="th-title" id="sold-date">Sold Date</th>
+                <th className="th-title" id="sold-Product-btn"></th>
               </tr>
             </thead>
             <tbody>
@@ -275,13 +278,13 @@ const handleDeleteClick = async (productId: string) => {
                     </td>
                   {/* </div> */}
                   {/* <div className="product-price-container"> */}
-                    <td className="stock-text total-cost-box">${entry.purchase_price}</td>
-                    <td className="stock-text">${entry.total_payout}</td>
-                    <td className="stock-text">${entry.profit}</td>
-                    <td className="stock-text">{entry.platform}</td>
+                    <td className="stock-text total-cost-box">{currency}{entry.purchase_price}</td>
+                    <td className="stock-text">{currency}{entry.total_payout}</td>
+                    <td className="stock-text">{currency}{entry.profit}</td>
+                    <td className="stock-text platform-box">{entry.platform}</td>
 
                   {/* </div> */}
-                  <td className="stock-text date-box">
+                  <td className="stock-text date-box sold-date-box">
                   {entry.sold_date ? formatDate(entry.sold_date) : ''}
                   </td>
                   <td>

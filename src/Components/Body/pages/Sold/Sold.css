@@ -1,0 +1,32 @@
+#cost{
+    width: 90px;
+}
+#payout{
+    width: 90px;
+}
+#p-l{
+    width: 90px;
+}
+#platform{
+    width: 90px;
+    padding-left: 20px;
+}
+#sold-date{
+    width: 100px;
+    /* padding-left: 40px ; */
+    /* width: 120px; */
+    /* padding-left: 50px; */
+    padding-left: 20px;
+}
+
+#sold-Product-btn{
+    width: 90px;
+
+}
+.sold-date-box{
+    padding-left: 0px;
+    padding-left: 20px;
+}
+.platform-box{
+    padding-left: 20px;
+}
