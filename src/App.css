@@ -10,6 +10,8 @@
 .logo {
   height: 6em;
   padding: 1.5em;
+
+opacity: 0;
 }
 .page{
   padding-left: 110px ;
