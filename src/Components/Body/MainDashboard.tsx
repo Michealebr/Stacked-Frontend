@@ -394,14 +394,14 @@ console.log(customEndDate)
             <div className="total-num-ctn">
               <p className="graph-title">Total Revenue</p>
               <div className="graph-number-ctn">
-                <div className="graph-number">{currency} {sumRev}</div>
+                <div className="graph-number">{currency}{sumRev}</div>
                 <div className="graph-percentage"></div>
               </div>
             </div>
             <div className="total-num-ctn">
               <p className="graph-title">Total Profit</p>
               <div className="graph-number-ctn">
-                <div className="graph-number">{currency} {sumProfit}</div>
+                <div className="graph-number">{currency}{sumProfit}</div>
                 <div className="graph-percentage"></div>
               </div>
             </div>
@@ -429,7 +429,7 @@ console.log(customEndDate)
               
             </div>
             <div className="recent-sold-profit">
-            {currency} {parseFloat(entry.profit) % 1 !== 0 ? parseFloat(entry.profit).toFixed(2) : parseInt(entry.profit, 10)}
+            {currency}{parseFloat(entry.profit) % 1 !== 0 ? parseFloat(entry.profit).toFixed(2) : parseInt(entry.profit, 10)}
             </div>
           </div>
         ))}
@@ -445,11 +445,11 @@ console.log(customEndDate)
               <p className="inner-card-title">Units Sold</p>
             </div>
             <div className="inner-card ic3">
-              <div className="inner-card-number">{currency} {totalStockCost}</div>
+              <div className="inner-card-number">{currency}{totalStockCost}</div>
               <p className="inner-card-title">Stock Cost</p>
             </div>
             <div className="inner-card ic4">
-              <div className="inner-card-number">{currency} {totalProjProfit}</div>
+              <div className="inner-card-number">{currency}{totalProjProfit}</div>
               <p className="inner-card-title">Projected Profit</p>
             </div>
           </div>
