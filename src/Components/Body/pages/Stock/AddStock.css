@@ -28,6 +28,8 @@ justify-content: center;
 }
 .add-stock-container{
     padding: 0px 15px;
+    height: 420px;
+    overflow: auto;
 }
 .each-product-container{
     display: flex;
@@ -59,7 +61,7 @@ align-items: center;
 }
 .add-to-stock-img{
     margin-right: 10px;
-    padding-left: 10px;
+    /* padding-left: 10px; */
     width: 50px;
     border-radius: 5px;
 }
