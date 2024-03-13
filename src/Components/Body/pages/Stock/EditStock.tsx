@@ -24,32 +24,87 @@ const shoeSizeFilter = [
 ];
 
 
-const productSizes = [
-  { value: "3", label: "3", quantity: 0 },
-  { value: "3.5", label: "3.5", quantity: 0 },
-  { value: "4", label: "4", quantity: 0 },
-  { value: "4.5", label: "4.5", quantity: 0 },
-  { value: "5", label: "5", quantity: 0 },
-  { value: "5.5", label: "5.5", quantity: 0 },
-  { value: "6 (39)", label: "6 (39)", quantity: 0 },
-  { value: "6 (40)", label: "6 (40)", quantity: 0 },
-  { value: "6.5", label: "6.5", quantity: 0 },
-  { value: "7", label: "7", quantity: 0 },
-  { value: "7.5", label: "7.5", quantity: 0 },
-  { value: "8", label: "8", quantity: 0 },
-  { value: "8.5", label: "8.5", quantity: 0 },
-  { value: "9", label: "9", quantity: 0 },
-  { value: "9.5", label: "9.5", quantity: 0 },
-  { value: "10", label: "10", quantity: 0 },
-  { value: "10.5", label: "10.5", quantity: 0 },
-  { value: "11", label: "11", quantity: 0 },
-  { value: "11.5", label: "11.5", quantity: 0 },
-  { value: "12", label: "12", quantity: 0 },
-  { value: "13", label: "13", quantity: 0 },
-  { value: "14", label: "14", quantity: 0 },
-  { value: "15", label: "15", quantity: 0 },
-  { value: "16", label: "16", quantity: 0 },
-  { value: "17", label: "17", quantity: 0 },
+const mensProductSizes = [
+  { value: "3", label: "3", quantity: 0, eu:"35.5", us:"3.5" },
+  { value: "3.5", label: "3.5", quantity: 0, eu:"36", us:"4" },
+  { value: "4", label: "4", quantity: 0 , eu:"36.5", us:"4.5" },
+  { value: "4.5", label: "4.5", quantity: 0 , eu:"37.5", us:"5" },
+  { value: "5", label: "5", quantity: 0 , eu:"38", us:"5.5" },
+  { value: "5.5", label: "5.5", quantity: 0 , eu:"38.5", us:"6" },
+  { value: "6 (39)", label: "6 (39)", quantity: 0 , eu:"39", us:"6.5" },
+  { value: "6 (40)", label: "6 (40)", quantity: 0 , eu:"40", us:"7" },
+  { value: "6.5", label: "6.5", quantity: 0 , eu:"40.5", us:"7.5" },
+  { value: "7", label: "7", quantity: 0 , eu:"41", us:"8" },
+  { value: "7.5", label: "7.5", quantity: 0 , eu:"42", us:"8.5" },
+  { value: "8", label: "8", quantity: 0 , eu:"42.5", us:"9" },
+  { value: "8.5", label: "8.5", quantity: 0 , eu:"43", us:"9.5" },
+  { value: "9", label: "9", quantity: 0 , eu:"44", us:"10" },
+  { value: "9.5", label: "9.5", quantity: 0 , eu:"44.5", us:"10.5" },
+  { value: "10", label: "10", quantity: 0 , eu:"45", us:"11" },
+  { value: "10.5", label: "10.5", quantity: 0 , eu:"45.5", us:"11.5" },
+  { value: "11", label: "11", quantity: 0 , eu:"46", us:"12" },
+  { value: "11.5", label: "11.5", quantity: 0 , eu:"47", us:"12.5" },
+  { value: "12", label: "12", quantity: 0 , eu:"47.5", us:"13" },
+  { value: "13", label: "13", quantity: 0 , eu:"48.5", us:"14" },
+  { value: "14", label: "14", quantity: 0 , eu:"49.5", us:"15" },
+  { value: "15", label: "15", quantity: 0 , eu:"50.5", us:"16" },
+  { value: "16", label: "16", quantity: 0 , eu:"51.5", us:"17" },
+  { value: "17", label: "17", quantity: 0 , eu:"52.5", us:"18" },
+];
+
+const womensProductSizes = [
+  { value: "2.5", label: "2.5", quantity: 0, eu:"35.5", us:"5" },
+  { value: "3", label: "3", quantity: 0, eu:"36", us:"5.5" },
+  { value: "3.5", label: "3.5", quantity: 0, eu:"36.5", us:"6" },
+  { value: "4", label: "4", quantity: 0 , eu:"37.5", us:"6.5" },
+  { value: "4.5", label: "4.5", quantity: 0 , eu:"38", us:"7" },
+  { value: "5", label: "5", quantity: 0 , eu:"38.5", us:"7.5" },
+  { value: "5.5", label: "5.5", quantity: 0 , eu:"39", us:"8" },
+  { value: "6", label: "6", quantity: 0 , eu:"40", us:"8.5" },
+  { value: "6.5", label: "6.5", quantity: 0 , eu:"40.5", us:"9" },
+  { value: "7", label: "7", quantity: 0 , eu:"41", us:"9.5" },
+  { value: "7.5", label: "7.5", quantity: 0 , eu:"42", us:"10" },
+  { value: "8", label: "8", quantity: 0 , eu:"42.5", us:"10.5" },
+  { value: "8.5", label: "8.5", quantity: 0 , eu:"43", us:"11" },
+  { value: "9", label: "9", quantity: 0 , eu:"44", us:"11.5" },
+  { value: "9.5", label: "9.5", quantity: 0 , eu:"44.5", us:"12" },
+];
+
+const gsProductSizes = [
+  { value: "3", label: "3", quantity: 0 , eu:"35.5", us:"3.5"},
+  { value: "3.5", label: "3.5", quantity: 0 , eu:"36", us:"4"},
+  { value: "4", label: "4", quantity: 0 , eu:"36.5", us:"4.5"},
+  { value: "4.5", label: "4.5", quantity: 0 , eu:"37.5", us:"5"},
+  { value: "5", label: "5", quantity: 0 , eu:"38", us:"5.5"},
+  { value: "5.5", label: "5.5", quantity: 0 , eu:"38.5", us:"6"},
+  { value: "6 (39)", label: "6 (39)", quantity: 0 , eu:"39", us:"6.5"},
+  { value: "6 (40)", label: "6 (40)", quantity: 0 , eu:"40", us:"7"},
+];
+const psProductSizes = [
+  { value: "10C", label: "10C", quantity: 0 , eu:"27.5", us:"10.5C"},
+  { value: "10.5C", label: "10.5C", quantity: 0 , eu:"28", us:"11C"},
+  { value: "11C", label: "11C", quantity: 0 , eu:"28.5", us:"11.5C"},
+  { value: "11.5C", label: "11.5C", quantity: 0 , eu:"29.5", us:"12C"},
+  { value: "12C", label: "12C", quantity: 0 , eu:"30", us:"12.5C"},
+  { value: "12.5C", label: "12.5C", quantity: 0 , eu:"31", us:"13C"},
+  { value: "13C", label: "13C", quantity: 0 , eu:"31.5", us:"13.5C"},
+  { value: "13.5C", label: "13.5C", quantity: 0 , eu:"32", us:"1Y"},
+  { value: "1", label: "1", quantity: 0 , eu:"33", us:"1.5Y"},
+  { value: "1.5", label: "1.5", quantity: 0 , eu:"33.5", us:"2Y"},
+  { value: "2", label: "2", quantity: 0 , eu:"34", us:"2.5Y"},
+  { value: "2.5", label: "2.5", quantity: 0 , eu:"35", us:"3Y"},
+];
+const tdProductSizes = [
+  { value: "0.5C", label: "0.5C", quantity: 0 , eu:"16", us:"1C"},
+  { value: "1.5C", label: "1.5C", quantity: 0 , eu:"17", us:"2C"},
+  { value: "2.5C", label: "2.5C", quantity: 0 , eu:"18.5", us:"3C"},
+  { value: "3.5C", label: "3.5C", quantity: 0 , eu:"19.5", us:"4C"},
+  { value: "4.5C", label: "4.5C", quantity: 0 , eu:"21", us:"5C"},
+  { value: "5.5C", label: "5.5C", quantity: 0 , eu:"22", us:"6C"},
+  { value: "6.5C", label: "6.5C", quantity: 0 , eu:"23.5", us:"7C"},
+  { value: "7.5C", label: "7.5C", quantity: 0 , eu:"25", us:"8C"},
+  { value: "8.5C", label: "8.5C", quantity: 0 , eu:"26", us:"9C"},
+  { value: "9.5C", label: "9.5C", quantity: 0 , eu:"27", us:"10C"},
 ];
 
 const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedProduct, closeAddModal }) => {
@@ -79,6 +134,8 @@ const EditStock: React.FC<EditStockProps> = ({ onClose,  onFormSubmit, selectedP
 const [expectedSalePrice, setEpectedSalePrice] = useState<number>()
 
 const [errorMessage, setErrorMessage] = useState<string>('');
+
+const [sizeCategoryArray, setSizeCategoryArray] = useState<ProductSize[]>([]);
 
   const handleSizeInteraction = (size: SelectSizeBtn, newQuantity?: number) => {
     setSelectedSizes((prevSizes) => {
@@ -174,6 +231,34 @@ const expectedProfit =  expectedSalePrice - totalcost
     );
   };
 
+  useEffect(() => {
+    if(selectedProduct){
+      const sizeCategoryValue = selectedProduct.size_category;
+      let categoryArray = [];
+      switch (sizeCategoryValue) {
+        case 0:
+          categoryArray = mensProductSizes;
+          break;
+        case 1:
+          categoryArray = womensProductSizes;
+          break;
+        case 2:
+          categoryArray = gsProductSizes;
+          break;
+        case 3:
+          categoryArray = psProductSizes;
+          break;
+        case 4:
+          categoryArray = tdProductSizes;
+          break;
+        default:
+          break;
+      }
+      setSizeCategoryArray(categoryArray);
+
+    }
+  }, [selectedProduct])
+
   return (
     <div className="modal-container">
       <form onSubmit={handleFormSubmit}>
@@ -211,12 +296,19 @@ const expectedProfit =  expectedSalePrice - totalcost
         <div className="form-scroll">
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <div className="product-size-container">
-          {productSizes.map((eachSize) => (
+
+
+
+{/* {isTdSize ? (
+
+
+mensProductSizes.map((eachSize) => (
             <button
               className="product-size-btn"
               key={eachSize.value}
               onClick={(e) => {
-                e.preventDefault(); // Prevent the form from submitting
+                e.preventDefault();
+               // Prevent the form from submitting
                 // handleSelectedSize(eachSize);
     setErrorMessage('');
                 
@@ -225,7 +317,41 @@ const expectedProfit =  expectedSalePrice - totalcost
             >
               {eachSize.label}
             </button>
-          ))}
+          ))
+        
+) : 
+        } */}
+
+          {/* {mensProductSizes.map((eachSize) => (
+            <button
+              className="product-size-btn"
+              key={eachSize.value}
+              onClick={(e) => {
+                e.preventDefault();
+               // Prevent the form from submitting
+                // handleSelectedSize(eachSize);
+    setErrorMessage('');
+                
+                handleSizeInteraction(eachSize);
+              }}
+            >
+              {eachSize.label}
+            </button>
+          ))} */}
+
+{sizeCategoryArray.map((eachSize) => (
+        <button
+          className="product-size-btn"
+          key={eachSize.value}
+          onClick={(e) => {
+            e.preventDefault();
+            setErrorMessage('');
+            handleSizeInteraction(eachSize);
+          }}
+        >
+          {eachSize.label}
+        </button>
+      ))}
         </div>
 
         <div className="size-list-container">
