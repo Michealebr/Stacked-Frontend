@@ -82,14 +82,6 @@ const calculateProfit = () => {
     calculateProfit();
   };
 
-//   const handleBlur = (
-//     value: number | string,
-//     setState: React.Dispatch<React.SetStateAction<number | string>>
-//   ) => {
-//     if (value === "") {
-//       setState(0);
-//     }
-//   };
 
   console.log(selectedProduct);
     const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
